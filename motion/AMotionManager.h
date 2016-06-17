@@ -13,7 +13,7 @@
 
  You should have received a copy of the GNU General Public License
  along with the Universal Saber library.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 /*
  * IMotionManager.h
  *
@@ -24,11 +24,8 @@
 #ifndef IMOTIONMANAGER_H_
 #define IMOTIONMANAGER_H_
 
-enum EMagnitudes
-{
-	eeSmall,
-	eeMedium,
-	eeLarge
+enum EMagnitudes {
+	eeSmall, eeMedium, eeLarge
 };
 
 /**
@@ -36,15 +33,14 @@ enum EMagnitudes
  * should provide motion detection specific to whatever specific sensors are
  * being used to detect motion.
  */
-class AMotionManager
-{
+class AMotionManager {
 public:
 	/**
-	 * Returns TRUE if the last update cycle detected a clash event.
+	 * Returns TRUE if the last update cycle detected a swing event.
 	 * Returns:
-	 * 	TRUE if a clash has happened, FALSE otherwise.
+	 * 	TRUE if a swing has happened, FALSE otherwise.
 	 */
-	virtual bool IsSwing() = 0;
+	virtual bool IsSwing(unsigned int treshold) = 0;
 
 	/**
 	 * Returns TRUE if the last update cycle detected a clash event.
@@ -73,8 +69,7 @@ public:
 	 * Returns:
 	 *   eeLarge by default, subclasses can choose to override this behavior.
 	 */
-	virtual EMagnitudes GetSwingMagnitude()
-	{
+	virtual EMagnitudes GetSwingMagnitude() {
 		return eeLarge;
 	}
 
@@ -86,12 +81,14 @@ public:
 	 * Returns:
 	 *   eeLarge by default, subclasses can choose to override this behavior.
 	 */
-	virtual EMagnitudes GetClashMagnitude()
-	{
+	virtual EMagnitudes GetClashMagnitude() {
 		return eeLarge;
 	}
 
+	/**
+	 * For Interrupt based devices, this functions raise an interrupt flag
+	 */
+	virtual void setInterrupt(bool interrupt);
 };
-
 
 #endif /* IMOTIONMANAGER_H_ */

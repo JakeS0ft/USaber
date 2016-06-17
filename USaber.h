@@ -34,6 +34,7 @@
 //Motion managers
 #include "motion/AMotionManager.h" //Abstract base class
 #include "motion/SimpleMotionManager.h"
+#include "motion/Mpu6050MotionManager.h"
 
 //Sound players
 #include "sound/ASoundPlayer.h"

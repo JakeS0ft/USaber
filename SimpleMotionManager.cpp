@@ -75,7 +75,7 @@ void SimpleMotionManager::Init()
 
 }
 
-bool SimpleMotionManager::IsSwing()
+bool SimpleMotionManager::IsSwing(unsigned int treshold)
 {
 	return mIsSwing;
 }

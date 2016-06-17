@@ -39,9 +39,8 @@ public:
 	 * Args:
 	 *  aSwingPin - Pin for the swing sensor
 	 *  aClashPin - Pin for the clash sensor (must be interrupt capable)
-	 *  aClashInt - Interrupt to attach for clash sensing
 	 */
-	SimpleMotionManager(int aSwingPin, int aClashPin = 2, int aClashInt = 0);
+	SimpleMotionManager(int aSwingPin, int aClashPin);
 
 	/**
 	 * Destructor.
@@ -50,7 +49,7 @@ public:
 
 	virtual void Init();
 
-	virtual bool IsSwing();
+	virtual bool IsSwing(unsigned int treshold);
 
 	virtual bool IsClash();
 
@@ -62,9 +61,6 @@ protected:
 
 	//Pin for the clash sensor.
 	int mClashPin;
-
-	//Interrupt for clash sensor.
-	int mClashInt;
 
 	//Swing flag
 	bool mIsSwing;

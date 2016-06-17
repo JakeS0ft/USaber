@@ -1,3 +1,10 @@
+
+
+#include <SoftwareSerial.h>
+#include <Arduino.h>
+#include <MPU6050_6Axis_MotionApps20.h>
+
+
 /*
  This file is part of the Universal Saber library.
 
@@ -22,6 +29,10 @@
  */
 
 #include <USaber.h>
+#define TRESHOLD 140
+
+
+ Mpu6050MotionManager* lpMotion = new Mpu6050MotionManager();
 
 /**
  * This function will test a motion manager. Run it in a loop and use
@@ -38,7 +49,7 @@ void TestMotion(AMotionManager* apMotion)
   {
     apMotion->Update();
 
-    if(apMotion->IsSwing())
+    if(apMotion->IsSwing(TRESHOLD))
     {
 	Serial.print("Swing detected:");
 	switch(apMotion->GetSwingMagnitude())
@@ -88,6 +99,7 @@ void setup()
 
 void loop()
 {
+  /** SIMPLE Devices **
   Serial.println("Testing SimpleMotionManager");
 
   //Set this to the pin connected to your swing sensor
@@ -97,6 +109,26 @@ void loop()
   const int lClashPin = 2;
 
   AMotionManager* lpMotion = new SimpleMotionManager(lSwingPin, lClashPin);
+  ** SIMPLE Devices **/
+
+
+
+  /** MPU6050 Devices **/
+  Serial.println("Testing MPU6050MotionManager");
+
+
+  AMotionManager* lpMotion = new Mpu6050MotionManager();
+  lpMotion->Init();
+
+  attachInterrupt(0, riseInterrupt, RISING);
+  /** MPU6050 Devices **/
+
+
+
+
+
+
+
 
   TestMotion(lpMotion);
   Serial.println("Test ends.");
@@ -105,3 +137,7 @@ void loop()
   delay(2000);
 
 }
+
+ void riseInterrupt() {
+  lpMotion->setInterrupt(true);
+} //dmpDataReady
