@@ -1,16 +1,13 @@
 /*
  This file is part of the Universal Saber library.
-
  The Universal Saber library is free software: you can redistribute it
  and/or modify it under the terms of the GNU General Public License as
  published by the Free Software Foundation, either version 3 of the License,
  or (at your option) any later version.
-
  The Universal Saber library is distributed in the hope that it will be
  useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
-
  You should have received a copy of the GNU General Public License
  along with the Universal Saber library.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -39,8 +36,9 @@ public:
 	 * Args:
 	 *  aSwingPin - Pin for the swing sensor
 	 *  aClashPin - Pin for the clash sensor (must be interrupt capable)
+	 *  aClashInt - Interrupt to attach for clash sensing
 	 */
-	SimpleMotionManager(int aSwingPin, int aClashPin);
+	SimpleMotionManager(int aSwingPin, int aClashPin = 2, int aClashInt = 0);
 
 	/**
 	 * Destructor.
@@ -49,7 +47,7 @@ public:
 
 	virtual void Init();
 
-	virtual bool IsSwing(unsigned int treshold);
+	virtual bool IsSwing(unsigned int TRESHOLD);
 
 	virtual bool IsClash();
 
@@ -61,6 +59,9 @@ protected:
 
 	//Pin for the clash sensor.
 	int mClashPin;
+
+	//Interrupt for clash sensor.
+	int mClashInt;
 
 	//Swing flag
 	bool mIsSwing;

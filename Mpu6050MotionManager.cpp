@@ -66,6 +66,7 @@ void clashInterupt()
  * Args:
  */
 Mpu6050MotionManager::Mpu6050MotionManager() {
+	mpu = new MPU6050();
 	Init();
 }
 
@@ -91,6 +92,7 @@ void Mpu6050MotionManager::Init() {
 #ifdef DEBUG_MPU
 	Serial.println(F("Initializing I2C devices..."));
 #endif
+
 	mpu->initialize();
 
 	// verify connection
