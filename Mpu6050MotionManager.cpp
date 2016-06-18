@@ -33,12 +33,19 @@
 	 * they are found via calibration process.
 	 * See this script http://www.i2cdevlib.com/forums/index.php?app=core&module=attach&section=attach&attach_id=27
 	 */
-#define XACCELOFFSET	69
-#define YACCELOFFSET	-5022
-#define ZACCELOFFSET	4747
-#define XGYROOFFSET		25
-#define YGYROOFFSET		-7
-#define ZGYROOFFSET		53
+//#define XACCELOFFSET	69
+//#define YACCELOFFSET	-5022
+//#define ZACCELOFFSET	4747
+//#define XGYROOFFSET		25
+//#define YGYROOFFSET		-7
+//#define ZGYROOFFSET		53
+
+#define XACCELOFFSET	-84
+#define YACCELOFFSET	788
+#define ZACCELOFFSET	1137
+#define XGYROOFFSET		7
+#define YGYROOFFSET		6
+#define ZGYROOFFSET		7
 
 
 #define SWING_TRESHOLD 5
@@ -67,6 +74,13 @@ void clashInterupt()
  */
 Mpu6050MotionManager::Mpu6050MotionManager() {
 	mpu = new MPU6050();
+	quaternion_reading = new Quaternion();
+	quaternion_last = new Quaternion();
+	quaternion = new Quaternion();
+
+	aaWorld_reading = new VectorInt16();
+	aaWorld_last = new VectorInt16();
+	aaWorld  = new VectorInt16();
 	Init();
 }
 
@@ -214,6 +228,7 @@ void Mpu6050MotionManager::Init() {
 }
 
 bool Mpu6050MotionManager::IsSwing(unsigned int treshold) {
+	Serial.println(quaternion->w);
 	return abs(quaternion->w) > treshold;
 }
 
