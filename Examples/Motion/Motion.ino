@@ -1,10 +1,3 @@
-
-
-#include <SoftwareSerial.h>
-#include <Arduino.h>
-#include <MPU6050_6Axis_MotionApps20.h>
-
-
 /*
  This file is part of the Universal Saber library.
 
@@ -29,10 +22,16 @@
  */
 
 #include <USaber.h>
+#include "SoftwareSerial.h"
+#include <MPU6050_6Axis_MotionApps20.h>
+#include <I2Cdev.h>
+#if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
+#include <Wire.h>
+#endif
 #define TRESHOLD 140
 
 
- Mpu6050MotionManager* lpMotion = new Mpu6050MotionManager();
+
 
 /**
  * This function will test a motion manager. Run it in a loop and use
@@ -115,12 +114,10 @@ void loop()
 
   /** MPU6050 Devices **/
   Serial.println("Testing MPU6050MotionManager");
-
-
   AMotionManager* lpMotion = new Mpu6050MotionManager();
+
   lpMotion->Init();
 
-  attachInterrupt(0, riseInterrupt, RISING);
   /** MPU6050 Devices **/
 
 
@@ -138,6 +135,4 @@ void loop()
 
 }
 
- void riseInterrupt() {
-  lpMotion->setInterrupt(true);
-} //dmpDataReady
+

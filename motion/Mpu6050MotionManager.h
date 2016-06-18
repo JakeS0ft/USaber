@@ -22,14 +22,21 @@
  */
 
 
-#include <MPU6050_6Axis_MotionApps20.h>
 
 #ifndef MPU6050MOTIONMANAGER_H_
 #define MPU6050MOTIONMANAGER_H_
 
 
 
+
+
+class MPU6050;
+class Quaternion;
+class VectorInt16;
+
+
 #include "AMotionManager.h"
+
 
 
 
@@ -58,33 +65,48 @@ public:
 
 	virtual void Update();
 
-	virtual void setInterrupt(bool interrupt);
-
 
 
 protected :
-	MPU6050 mpu;
-	volatile  bool interrupt; // indicates whether MPU interrupt pin has gone high
-	bool dmpReady = false;  // set true if DMP init was successful
-	uint8_t mpuIntStatus;   // holds actual interrupt status byte from MPU
-	uint8_t devStatus; // return status after each device operation (0 = success, !0 = error)
-	uint16_t packetSize;    // expected DMP packet size (default is 42 bytes)
-	uint8_t fifoBuffer[64]; // FIFO storage buffer
-	uint16_t mpuFifoCount;     // count of all bytes currently in FIFO
 
+
+	//Interrupt for clash sensor.
+	volatile bool mClashInt;
+
+	bool dmpReady = false;  // set true if DMP init was successful
+
+	unsigned short int mpuIntStatus;   // holds actual interrupt status byte from MPU
+
+	unsigned short int devStatus; // return status after each device operation (0 = success, !0 = error)
+
+	unsigned int packetSize;    // expected DMP packet size (default is 42 bytes)
+
+	unsigned short int fifoBuffer[64]; // FIFO storage buffer
+
+	unsigned int mpuFifoCount;     // count of all bytes currently in FIFO
+
+
+	MPU6050 *mpu;
 
 	// orientation/motion vars
-	Quaternion quaternion;           // [w, x, y, z]         quaternion container
-	static Quaternion quaternion_last;  // [w, x, y, z]         quaternion container
-	static Quaternion quaternion_reading; // [w, x, y, z]         quaternion container
+	//  - Quaternion containers [w, x, y, z]
+	Quaternion *quaternion_reading;  // holds the actual readings
+	Quaternion *quaternion_last;     // holds the last readings
+	Quaternion *quaternion;           	   // last readings - actual readings
 
-	VectorInt16 aaWorld; // [x, y, z]            world-frame accel sensor measurements
-	static VectorInt16 aaWorld_last; // [x, y, z]            world-frame accel sensor measurements
-	static VectorInt16 aaWorld_reading; // [x, y, z]            world-frame accel sensor measurements
+
+	//  - World-frame accel sensor measurements [x, y, z] :
+	//    Acceleration components with gravity removed and adjusted
+	//    for the world frame of reference
+	VectorInt16 *aaWorld_reading; // holds the actual readings
+	VectorInt16 *aaWorld_last; 	// holds the last readings
+	VectorInt16 *aaWorld; 				// last readings - actual readings
+
+
 
 
 private :
 
 };
 
-#endif /* LIBRARIES_USABER_MOTION_MPU6050MOTIONMANAGER_H_ */
+#endif /* MPU6050MOTIONMANAGER_H_ */

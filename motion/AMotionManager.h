@@ -21,12 +21,14 @@
  *      Author: JakeSoft
  */
 
-#ifndef IMOTIONMANAGER_H_
+#if not defined IMOTIONMANAGER_H_
 #define IMOTIONMANAGER_H_
 
 enum EMagnitudes {
 	eeSmall, eeMedium, eeLarge
 };
+
+
 
 /**
  * This abstract class provides generic methods to detect motion. Subclasses
@@ -85,10 +87,6 @@ public:
 		return eeLarge;
 	}
 
-	/**
-	 * For Interrupt based devices, this functions raise an interrupt flag
-	 */
-	virtual void setInterrupt(bool interrupt);
 };
 
 #endif /* IMOTIONMANAGER_H_ */
