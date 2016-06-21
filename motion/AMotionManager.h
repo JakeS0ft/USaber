@@ -42,7 +42,7 @@ public:
 	 * Returns:
 	 * 	TRUE if a swing has happened, FALSE otherwise.
 	 */
-	virtual bool IsSwing(unsigned int treshold) = 0;
+	virtual bool IsSwing() = 0;
 
 	/**
 	 * Returns TRUE if the last update cycle detected a clash event.

@@ -47,7 +47,7 @@ public:
 
 	virtual void Init();
 
-	virtual bool IsSwing(unsigned int TRESHOLD);
+	virtual bool IsSwing();
 
 	virtual bool IsClash();
 

@@ -17,29 +17,29 @@
 /*
  * MPU6050MotionManager.h
  *
- *  Created on: 27 mai 2016
- *      Author: Neskweek
+ *  Created on: 27 May 2016
+ *      Authors: Neskweek, JakeSoft
  */
-
-
 
 #ifndef MPU6050MOTIONMANAGER_H_
 #define MPU6050MOTIONMANAGER_H_
 
-
-
-
+#include "AMotionManager.h"
 
 class MPU6050;
 class Quaternion;
 class VectorInt16;
 
-
-#include "AMotionManager.h"
-
-
-
-
+//Container for define motion tolerance data
+struct MPU6050TolData
+{
+	//Tolerance for large swings
+	unsigned int mSwingLarge;
+	//Tolerance for medium swings
+	unsigned int mSwingMedium;
+	//Tolerance for small swings
+	unsigned int mSwingSmall;
+};
 
 class Mpu6050MotionManager : public AMotionManager
 {
@@ -47,19 +47,19 @@ public:
 
 	/**
 	 * Constructor.
-	 * Args:
+	 * Args: apTolData - Swing tolerance data
 	 */
-	Mpu6050MotionManager();
+	Mpu6050MotionManager(MPU6050TolData* apTolData);
 
 	/**
 	 * Destructor.
-	 * Args:
+	 * Args: NONE
 	 */
 	virtual ~Mpu6050MotionManager();
 
 	virtual void Init();
 
-	virtual bool IsSwing(unsigned int treshold);
+	virtual bool IsSwing();
 
 	virtual bool IsClash();
 
@@ -73,7 +73,7 @@ protected :
 	//Interrupt for clash sensor.
 	volatile bool mClashInt;
 
-	bool dmpReady = false;  // set true if DMP init was successful
+	bool dmpReady;  // set true if DMP init was successful
 
 	unsigned short int mpuIntStatus;   // holds actual interrupt status byte from MPU
 
@@ -102,7 +102,7 @@ protected :
 	VectorInt16 *aaWorld_last; 	// holds the last readings
 	VectorInt16 *aaWorld; 				// last readings - actual readings
 
-
+	MPU6050TolData* mpTolData; //Pointer to swing tolerance data
 
 
 private :
