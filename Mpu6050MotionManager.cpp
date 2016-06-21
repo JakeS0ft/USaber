@@ -23,7 +23,7 @@
 
 #include "motion/Mpu6050MotionManager.h"
 #include <Arduino.h>
-#include <MPU6050_6Axis_MotionApps20.h>
+#include "support/MPU6050/MPU6050_6Axis_MotionApps20.h"
 #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
 #include <Wire.h>
 #endif
@@ -72,7 +72,10 @@ void clashInterupt()
  * Constructor.
  * Args:
  */
-Mpu6050MotionManager::Mpu6050MotionManager() {
+Mpu6050MotionManager::Mpu6050MotionManager(MPU6050TolData* apTolData) :
+		dmpReady(false),
+		mpTolData(apTolData)
+{
 	mpu = new MPU6050();
 	quaternion_reading = new Quaternion();
 	quaternion_last = new Quaternion();
@@ -227,9 +230,11 @@ void Mpu6050MotionManager::Init() {
 	/***** MP6050 MOTION DETECTOR INITIALISATION  *****/
 }
 
-bool Mpu6050MotionManager::IsSwing(unsigned int treshold) {
+bool Mpu6050MotionManager::IsSwing()
+{
 	Serial.println(quaternion->w);
-	return abs(quaternion->w) > treshold;
+
+	return abs(quaternion->w) > mpTolData->mSwingSmall;
 }
 
 bool Mpu6050MotionManager::IsClash() {
