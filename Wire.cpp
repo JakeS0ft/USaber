@@ -23,10 +23,10 @@ extern "C" {
   #include <stdlib.h>
   #include <string.h>
   #include <inttypes.h>
-  #include "utility\twi.h"
+  #include "support/Wire/utility/twi.h"
 }
 
-#include "Wire.h"
+#include "support/Wire/Wire.h"
 
 // Initialize Class Variables //////////////////////////////////////////////////
 

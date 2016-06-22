@@ -13,7 +13,7 @@
 
  You should have received a copy of the GNU General Public License
  along with the Universal Saber library.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 /*
  * Motion.ino
  *    This will test the motion managers!
@@ -25,8 +25,8 @@
 
 #define TRESHOLD 140
 
-
-
+//Tolerance threshold data for MPU6050 motion manager
+MPU6050TolData gToleranceData;
 
 /**
  * This function will test a motion manager. Run it in a loop and use
@@ -34,100 +34,97 @@
  */
 void TestMotion(AMotionManager* apMotion)
 {
-  apMotion->Init();
+	apMotion->Init();
 
-  unsigned long lTestStartTime = millis();
+	unsigned long lTestStartTime = millis();
 
-  //Run the test for 30 seconds
-  while(millis() - lTestStartTime <= 30000)
-  {
-    apMotion->Update();
-
-    if(apMotion->IsSwing(TRESHOLD))
-    {
-	Serial.print("Swing detected:");
-	switch(apMotion->GetSwingMagnitude())
+	//Run the test for 30 seconds
+	while(millis() - lTestStartTime <= 30000)
 	{
-	case eeSmall:
-		Serial.println("Small");
-		break;
-	case eeMedium:
-		Serial.println("Medium");
-		break;
-	case eeLarge:
-		Serial.println("Large");
-		break;
-	default:
-		Serial.println("Unknown");
-		break;
-	}
-    }
+		apMotion->Update();
 
-    if(apMotion->IsClash())
-    {
-      Serial.print("Clash detected:");
-      switch(apMotion->GetClashMagnitude())
-      {
-      case eeSmall:
-        Serial.println("Small");
-	break;
-      case eeMedium:
-	Serial.println("Medium");
-	break;
-      case eeLarge:
-	Serial.println("Large");
-	break;
-      default:
-	Serial.println("Unknown");
-	break;
-      }
-    }
-  }
+		if(apMotion->IsSwing())
+		{
+			Serial.print("Swing detected:");
+			switch(apMotion->GetSwingMagnitude())
+			{
+			case eeSmall:
+				Serial.println("Small");
+				break;
+			case eeMedium:
+				Serial.println("Medium");
+				break;
+			case eeLarge:
+				Serial.println("Large");
+				break;
+			default:
+				Serial.println("Unknown");
+				break;
+			}
+		}
+
+		if(apMotion->IsClash())
+		{
+			Serial.print("Clash detected:");
+			switch(apMotion->GetClashMagnitude())
+			{
+			case eeSmall:
+				Serial.println("Small");
+				break;
+			case eeMedium:
+				Serial.println("Medium");
+				break;
+			case eeLarge:
+				Serial.println("Large");
+				break;
+			default:
+				Serial.println("Unknown");
+				break;
+			}
+		}
+	}
 
 }
 
 void setup()
 {
-  Serial.begin(9600);
+
+	//Set MPU6050 swing tolerance threasholds here.
+	//Tweak as needed to adjust sensitivity
+	gToleranceData.mSwingLarge = TRESHOLD;
+	gToleranceData.mSwingMedium = TRESHOLD;
+	gToleranceData.mSwingSmall = TRESHOLD;
+
+	Serial.begin(9600);
 }
 
 void loop()
 {
-  /** SIMPLE Devices **
-  Serial.println("Testing SimpleMotionManager");
 
-  //Set this to the pin connected to your swing sensor
-  const int lSwingPin = 7;
-  //Set this to the pin connect to your clash sensor
-  //NOTE: This must be a pin capable of handling an external interrupt
-  const int lClashPin = 2;
+	/** SIMPLE Devices (Uncomment to test Simple Motion Manager) **
+	Serial.println("Testing SimpleMotionManager");
 
-  AMotionManager* lpMotion = new SimpleMotionManager(lSwingPin, lClashPin);
-  ** SIMPLE Devices **/
+	//Set this to the pin connected to your swing sensor
+	const int lSwingPin = 7;
+	//Set this to the pin connect to your clash sensor
+	//NOTE: This must be a pin capable of handling an external interrupt
+	const int lClashPin = 2;
 
-
-
-  /** MPU6050 Devices **/
-  Serial.println("Testing MPU6050MotionManager");
-  AMotionManager* lpMotion = new Mpu6050MotionManager();
-
-  lpMotion->Init();
-
-  /** MPU6050 Devices **/
+	AMotionManager* lpMotion = new SimpleMotionManager(lSwingPin, lClashPin);
+	/** END SIMPLE Devices test setup **/
 
 
+	/** MPU6050 Devices (Uncomment to test MPU6050 Motion Manager) **/
+	Serial.println("Testing MPU6050MotionManager");
+	AMotionManager* lpMotion = new Mpu6050MotionManager(&gToleranceData);
 
+	lpMotion->Init();
 
+	TestMotion(lpMotion);
+	Serial.println("Test ends.");
+	/** END MPU6050 Devices test setup **/
 
-
-
-
-  TestMotion(lpMotion);
-  Serial.println("Test ends.");
-
-  delete lpMotion;
-  delay(2000);
+	delete lpMotion;
+	delay(2000);
 
 }
-
-

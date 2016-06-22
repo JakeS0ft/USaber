@@ -36,7 +36,7 @@
 #endif
 
 #include "pins_arduino.h"
-#include "twi.h"
+#include "support/Wire/utility/twi.h"
 
 static volatile uint8_t twi_state;
 static volatile uint8_t twi_slarw;
