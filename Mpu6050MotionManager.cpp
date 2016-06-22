@@ -25,7 +25,7 @@
 #include <Arduino.h>
 #include "support/MPU6050/MPU6050_6Axis_MotionApps20.h"
 #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
-#include <Wire.h>
+#include "support/Wire/Wire.h"
 #endif
 
 	/*
@@ -81,9 +81,6 @@ Mpu6050MotionManager::Mpu6050MotionManager(MPU6050TolData* apTolData) :
 	quaternion_last = new Quaternion();
 	quaternion = new Quaternion();
 
-	aaWorld_reading = new VectorInt16();
-	aaWorld_last = new VectorInt16();
-	aaWorld  = new VectorInt16();
 	Init();
 }
 
@@ -243,10 +240,7 @@ bool Mpu6050MotionManager::IsClash() {
 
 void Mpu6050MotionManager::Update() {
 	long multiplier = 1000;
-	VectorInt16 aa;    // [x, y, z]            accel sensor measurements
-	VectorInt16 aaReal; // [x, y, z]            gravity-free accel sensor measurements
 
-	VectorFloat gravity;    // [x, y, z]            gravity vector
 // if programming failed, don't try to do anything
 	if (!dmpReady)
 		return;
@@ -279,40 +273,34 @@ void Mpu6050MotionManager::Update() {
 			mpuFifoCount = mpu->getFIFOCount();
 
 // read a packet from FIFO
-		mpu->getFIFOBytes((uint8_t*)fifoBuffer, packetSize);
+		mpu->getFIFOBytes(fifoBuffer, packetSize);
 
 // track FIFO count here in case there is > 1 packet available
 // (this lets us immediately read more without waiting for an interrupt)
 		mpuFifoCount -= packetSize;
 
 //Save last values
-		quaternion_last = quaternion_reading;
-		aaWorld_last = aaWorld_reading;
+		quaternion_last->w = quaternion_reading->w;
+
+//		aaWorld_last = aaWorld_reading;
 
 //retrieve values
-		mpu->dmpGetQuaternion(quaternion_reading, (uint8_t*)fifoBuffer);
-		mpu->dmpGetGravity(&gravity, quaternion_reading);
-		mpu->dmpGetAccel(&aa, (uint8_t*)fifoBuffer);
-		mpu->dmpGetLinearAccel(&aaReal, &aa, &gravity);
-		mpu->dmpGetLinearAccelInWorld(aaWorld, &aaReal, quaternion_reading);
-#ifdef LS_MOTION_HEAVY_DEBUG
-// display quaternion values in easy matrix form: w x y z
-		printQuaternion(quaternion,multiplier);
+		mpu->dmpGetQuaternion(quaternion_reading, fifoBuffer);
 
-// display initial world-frame acceleration, adjusted to remove gravity
-// and rotated based on known orientation from quaternion
-		printAcceleration(aaWorld);
-#endif
 
 //We multiply by multiplier to obtain a more precise detection
 		quaternion->w = quaternion_reading->w * multiplier
 				- quaternion_last->w * multiplier;
-		quaternion->x = quaternion_reading->x * multiplier
-				- quaternion_last->x * multiplier;
-		quaternion->y = quaternion_reading->y * multiplier
-				- quaternion_last->y * multiplier;
-		quaternion->z = quaternion_reading->z * multiplier
-				- quaternion_last->z * multiplier;
+		/*
+		 * Keeping those in case we want to add some fine grain
+		 * movement detection
+		 */
+//		quaternion->x = quaternion_reading->x * multiplier
+//				- quaternion_last->x * multiplier;
+//		quaternion->y = quaternion_reading->y * multiplier
+//				- quaternion_last->y * multiplier;
+//		quaternion->z = quaternion_reading->z * multiplier
+//				- quaternion_last->z * multiplier;
 	}
 }
 

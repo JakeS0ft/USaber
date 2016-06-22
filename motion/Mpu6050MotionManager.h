@@ -95,7 +95,6 @@ protected :
 	Quaternion *quaternion;           	   // last readings - actual readings
 
 
-
 	MPU6050TolData* mpTolData; //Pointer to swing tolerance data
 
 
