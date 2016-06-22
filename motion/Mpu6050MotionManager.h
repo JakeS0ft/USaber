@@ -95,12 +95,6 @@ protected :
 	Quaternion *quaternion;           	   // last readings - actual readings
 
 
-	//  - World-frame accel sensor measurements [x, y, z] :
-	//    Acceleration components with gravity removed and adjusted
-	//    for the world frame of reference
-	VectorInt16 *aaWorld_reading; // holds the actual readings
-	VectorInt16 *aaWorld_last; 	// holds the last readings
-	VectorInt16 *aaWorld; 				// last readings - actual readings
 
 	MPU6050TolData* mpTolData; //Pointer to swing tolerance data
 

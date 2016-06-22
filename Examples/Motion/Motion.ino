@@ -23,7 +23,9 @@
 
 #include <USaber.h>
 
-#define TRESHOLD 140
+#define SMALL_TRESHOLD   5
+#define MEDIUM_TRESHOLD  9
+#define LARGE_TRESHOLD  18
 
 //Tolerance threshold data for MPU6050 motion manager
 MPU6050TolData gToleranceData;
@@ -91,9 +93,9 @@ void setup()
 
 	//Set MPU6050 swing tolerance threasholds here.
 	//Tweak as needed to adjust sensitivity
-	gToleranceData.mSwingLarge = TRESHOLD;
-	gToleranceData.mSwingMedium = TRESHOLD;
-	gToleranceData.mSwingSmall = TRESHOLD;
+	gToleranceData.mSwingLarge  = SMALL_TRESHOLD;
+	gToleranceData.mSwingMedium = MEDIUM_TRESHOLD;
+	gToleranceData.mSwingSmall  = SMALL_TRESHOLD;
 
 	Serial.begin(9600);
 }
