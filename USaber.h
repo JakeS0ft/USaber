@@ -24,6 +24,8 @@
 #ifndef USABER_H_
 #define USABER_H_
 
+#include <Wire.h>
+
 //Blade managers
 #include "blade/IBladeManager.h" //Abstract interface/base class
 #include "blade/CheapieBlade.h"
