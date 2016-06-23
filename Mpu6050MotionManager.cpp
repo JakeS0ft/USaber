@@ -48,9 +48,7 @@
 #define ZGYROOFFSET		7
 
 
-#define SWING_TRESHOLD 5
-
-#define DEBUG_MPU
+//#define DEBUG_MPU
 
 //Flags when a clash interrupt is detected
  volatile bool tClashIntr;
@@ -229,8 +227,9 @@ void Mpu6050MotionManager::Init() {
 
 bool Mpu6050MotionManager::IsSwing()
 {
+#ifdef DEBUG_MPU
 	Serial.println(quaternion->w);
-
+#endif
 	return abs(quaternion->w) > mpTolData->mSwingSmall;
 }
 
