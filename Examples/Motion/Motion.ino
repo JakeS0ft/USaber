@@ -21,6 +21,7 @@
  *      Author: JakeSoft <http://forum.arduino.cc/index.php?topic=261980.0>
  */
 
+#include <Wire.h>
 #include <USaber.h>
 
 #define SMALL_TRESHOLD   5

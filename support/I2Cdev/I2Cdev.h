@@ -84,7 +84,7 @@ THE SOFTWARE.
         #include <i2c_t3.h>
         #define BUFFER_LENGTH 32
     #elif I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
-        #include "../Wire/Wire.h"
+        #include <Wire.h>
     #endif
     #if I2CDEV_IMPLEMENTATION == I2CDEV_I2CMASTER_LIBRARY
         #include <I2C.h>

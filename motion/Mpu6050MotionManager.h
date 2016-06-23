@@ -81,7 +81,7 @@ protected :
 
 	unsigned int packetSize;    // expected DMP packet size (default is 42 bytes)
 
-	unsigned short int fifoBuffer[64]; // FIFO storage buffer
+	unsigned char fifoBuffer[64]; // FIFO storage buffer
 
 	unsigned int mpuFifoCount;     // count of all bytes currently in FIFO
 

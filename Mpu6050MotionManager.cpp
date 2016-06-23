@@ -25,7 +25,7 @@
 #include <Arduino.h>
 #include "support/MPU6050/MPU6050_6Axis_MotionApps20.h"
 #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
-#include "support/Wire/Wire.h"
+#include <Wire.h>
 #endif
 
 	/*
