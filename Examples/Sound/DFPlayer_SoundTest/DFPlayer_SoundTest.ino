@@ -24,7 +24,10 @@ The only things that should need changing is what type of module is instaitated
 in the loop() function and add whatever extra parameterization may be needed.
 */
 
+//Note: Ardino IDE Versions previous to 1.6.6 must include Wire.h
+#include <Wire.h>
 #include <USaber.h>
+
 #define PLAY_DURATION 2500 //How long sound will be allowed to play before next
 #define RANDOM_ATTEMPTS 5 //How many times to play during random playback test
 

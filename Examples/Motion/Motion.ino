@@ -21,6 +21,7 @@
  *      Author: JakeSoft <http://forum.arduino.cc/index.php?topic=261980.0>
  */
 
+//Note: Ardino IDE Versions previous to 1.6.6 must include Wire.h
 #include <Wire.h>
 #include <USaber.h>
 
