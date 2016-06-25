@@ -24,7 +24,11 @@
 #ifndef USABER_H_
 #define USABER_H_
 
+#include "USaberConfig.h"
+
+#ifdef AUTO_INCLUDE_WIRE
 #include <Wire.h>
+#endif
 
 //Blade managers
 #include "blade/IBladeManager.h" //Abstract interface/base class
@@ -36,7 +40,10 @@
 //Motion managers
 #include "motion/AMotionManager.h" //Abstract base class
 #include "motion/SimpleMotionManager.h"
+
+#ifdef BUILD_MPU6050
 #include "motion/Mpu6050MotionManager.h"
+#endif
 
 //Sound players
 #include "sound/ASoundPlayer.h"

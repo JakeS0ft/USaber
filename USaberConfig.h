@@ -73,4 +73,10 @@
  */
 //#define BUILD_DFPLAYERSOUNDPLAYER
 
-#endif /* LIBRARIES_USABER_USABERCONFIG_H_ */
+/**
+ * Try to automatically include the Wire library.
+ * Note: This may not work for older versions of the Arduino IDE.
+ */
+//#define AUTO_INCLUDE_WIRE
+
+#endif /* _USABER_USABERCONFIG_H_ */
