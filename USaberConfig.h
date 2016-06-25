@@ -23,7 +23,7 @@
  *  no code or only "Light Weight" code unless their corresponding BUILD_XXX
  *  #define exists.
  *
- *  To remove a feature by preventing it from building, simply comment out the
+ *  To remove a feature and prevent it from building, simply comment out the
  *  corresponding #define for the feature.
  *
  *  The reason this is necessary is that some of the libraries introduce
@@ -52,31 +52,31 @@
  * Build the MPU6050MotionManager.
  * Note: This requires that I2CDEV also be enabled below.
  */
-//#define BUILD_MPU6050
+#define BUILD_MPU6050
 
 /**
  * Build USaber's built-in I2CDev library.
  * Note: This requires that Wire also be included in the sketch.
  */
-//#define BUILD_I2CDEV
+#define BUILD_I2CDEV
 
 /**
  * Build USaber's built-in Software Serial library.
  * Note: This must be included for the DFPlayerSouundPlayer to build.
  * Note: Some other features may not work if this is excluded from the build.
  */
-//#define BUILD_SOFTWARE_SERIAL
+#define BUILD_SOFTWARE_SERIAL
 
 /**
  * Build the DFPlayerSoundPlayer.
  * Note: Software serial must also be enabled for this to work.
  */
-//#define BUILD_DFPLAYERSOUNDPLAYER
+#define BUILD_DFPLAYERSOUNDPLAYER
 
 /**
  * Try to automatically include the Wire library.
  * Note: This may not work for older versions of the Arduino IDE.
  */
-//#define AUTO_INCLUDE_WIRE
+#define AUTO_INCLUDE_WIRE
 
 #endif /* _USABER_USABERCONFIG_H_ */

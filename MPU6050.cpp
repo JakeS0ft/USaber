@@ -34,10 +34,11 @@ THE SOFTWARE.
 ===============================================
 */
 
+#ifdef BUILD_MPU6050
 #include "support/MPU6050/MPU6050.h"
 #include "USaberConfig.h"
 
-#ifdef BUILD_MPU6050
+
 /** Default constructor, uses default I2C address.
  * @see MPU6050_DEFAULT_ADDRESS
  */
