@@ -21,11 +21,16 @@
  *      Author: Neskweek
  */
 
+#include "USaberConfig.h"
+
+#ifdef BUILD_MPU6050
+
 #include "motion/Mpu6050MotionManager.h"
 #include <Arduino.h>
 #include "support/MPU6050/MPU6050_6Axis_MotionApps20.h"
 #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
 #include <Wire.h>
+
 #endif
 
 	/*
@@ -302,4 +307,4 @@ void Mpu6050MotionManager::Update() {
 //				- quaternion_last->z * multiplier;
 	}
 }
-
+#endif //BUILD_MPU6050

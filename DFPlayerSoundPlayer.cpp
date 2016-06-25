@@ -21,6 +21,9 @@
  *      Author: JakeSoft <http://forum.arduino.cc/index.php?topic=261980.0>
  */
 
+#include <USaberConfig.h>
+
+#ifdef BUILD_DFPLAYERSOUNDPLAYER
 #include <Arduino.h>
 #include "sound/DFPlayerSoundPlayer.h"
 #include "SoftwareSerial.h"
@@ -346,3 +349,5 @@ void DFPlayerSoundPlayer::SetFont(unsigned char aFontIdx)
 {
 	mFontIdx = aFontIdx;
 }
+
+#endif //BUILD_DFPLAYERSOUNDPLAYER

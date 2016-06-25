@@ -29,6 +29,9 @@ The latest version of this library can always be found at
 http://arduiniana.org.
 */
 
+#include "USaberConfig.h"
+
+#ifdef BUILD_SOFTWARE_SERIAL
 // When set, _DEBUG co-opts pins 11 and 13 for debugging with an
 // oscilloscope or logic analyzer.  Beware: it also slightly modifies
 // the bit times, so don't rely on it too much at high baud rates
@@ -513,3 +516,5 @@ int SoftwareSerial::peek()
   // Read from "head"
   return _receive_buffer[_receive_buffer_head];
 }
+
+#endif //BUILD_SOFTWARE_SERIAL

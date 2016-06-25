@@ -43,6 +43,10 @@ THE SOFTWARE.
 ===============================================
 */
 
+#include "USaberConfig.h"
+
+#ifdef BUILD_I2CDEV
+
 #include "support/I2Cdev/I2Cdev.h"
 
 #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
@@ -1434,3 +1438,5 @@ uint16_t I2Cdev::readTimeout = I2CDEV_DEFAULT_READ_TIMEOUT;
     }
 
 #endif
+
+#endif //BUILD_I2CDEV
