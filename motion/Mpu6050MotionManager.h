@@ -28,17 +28,17 @@
 
 class MPU6050;
 class Quaternion;
-class VectorInt16;
+//class VectorInt16;
 
 //Container for define motion tolerance data
 struct MPU6050TolData
 {
 	//Tolerance for large swings
-	unsigned int mSwingLarge;
+	float mSwingLarge;
 	//Tolerance for medium swings
-	unsigned int mSwingMedium;
+	float mSwingMedium;
 	//Tolerance for small swings
-	unsigned int mSwingSmall;
+	float mSwingSmall;
 };
 
 class Mpu6050MotionManager : public AMotionManager
@@ -65,6 +65,7 @@ public:
 
 	virtual void Update();
 
+	virtual EMagnitudes GetSwingMagnitude() ;
 
 
 protected :
@@ -90,13 +91,12 @@ protected :
 
 	// orientation/motion vars
 	//  - Quaternion containers [w, x, y, z]
-	Quaternion *quaternion_reading;  // holds the actual readings
-	Quaternion *quaternion_last;     // holds the last readings
-	Quaternion *quaternion;           	   // last readings - actual readings
-
+	Quaternion *curOrientation;  	// holds the actual readings
+	Quaternion *prevOrientation;    // holds the last readings
+	Quaternion *curRotation;          // last readings - actual readings
+	Quaternion *prevRotation;          // last readings - actual readings
 
 	MPU6050TolData* mpTolData; //Pointer to swing tolerance data
-
 
 private :
 

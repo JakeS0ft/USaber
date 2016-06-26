@@ -21,42 +21,36 @@
  *      Author: Neskweek
  */
 
-#include "USaberConfig.h"
-
-#ifdef BUILD_MPU6050
-
 #include "motion/Mpu6050MotionManager.h"
 #include <Arduino.h>
-#include "support/MPU6050/MPU6050_6Axis_MotionApps20.h"
+//#include "support/MPU6050/MPU6050_6Axis_MotionApps20.h"
+#include "support/MPU6050/MPU6050_9Axis_MotionApps41.h"
 #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
 #include <Wire.h>
-
 #endif
 
-	/*
-	 * Those offsets are specific to each MPU6050 device.
-	 * they are found via calibration process.
-	 * See this script http://www.i2cdevlib.com/forums/index.php?app=core&module=attach&section=attach&attach_id=27
-	 */
+/*
+ * Those offsets are specific to each MPU6050 device.
+ * they are found via calibration process.
+ * See this script http://www.i2cdevlib.com/forums/index.php?app=core&module=attach&section=attach&attach_id=27
+ */
 //#define XACCELOFFSET	69
 //#define YACCELOFFSET	-5022
 //#define ZACCELOFFSET	4747
 //#define XGYROOFFSET		25
 //#define YGYROOFFSET		-7
 //#define ZGYROOFFSET		53
-
-#define XACCELOFFSET	-84
-#define YACCELOFFSET	788
-#define ZACCELOFFSET	1137
-#define XGYROOFFSET		7
-#define YGYROOFFSET		6
-#define ZGYROOFFSET		7
-
+#define XACCELOFFSET	-51
+#define YACCELOFFSET	809
+#define ZACCELOFFSET	1147
+#define XGYROOFFSET		-11
+#define YGYROOFFSET		24
+#define ZGYROOFFSET		-39
 
 //#define DEBUG_MPU
 
 //Flags when a clash interrupt is detected
- volatile bool tClashIntr;
+volatile bool tClashIntr;
 
 /**
  * Function: ClashInterupt()
@@ -65,26 +59,21 @@
  * Args:    NONE
  * Returns: NONE
  */
-void clashInterupt()
-{
+void clashInterupt() {
 	tClashIntr = true;
 }
-
 
 /**
  * Constructor.
  * Args:
  */
 Mpu6050MotionManager::Mpu6050MotionManager(MPU6050TolData* apTolData) :
-		dmpReady(false),
-		mpTolData(apTolData)
-{
+		dmpReady(false), mpTolData(apTolData) {
 	mpu = new MPU6050();
-	quaternion_reading = new Quaternion();
-	quaternion_last = new Quaternion();
-	quaternion = new Quaternion();
-
-	Init();
+	curRotation = new Quaternion();
+	prevRotation = new Quaternion();
+	curOrientation = new Quaternion();
+	prevOrientation = new Quaternion();
 }
 
 /**
@@ -111,6 +100,8 @@ void Mpu6050MotionManager::Init() {
 #endif
 
 	mpu->initialize();
+	//clear any data residu
+	mpu->reset();
 
 	// verify connection
 #ifdef DEBUG_MPU
@@ -119,14 +110,12 @@ void Mpu6050MotionManager::Init() {
 			mpu->testConnection() ?
 			F("MPU6050 connection successful") :
 			F("MPU6050 connection failed"));
-	Serial.println(
-				mpu->getDeviceID());
+	Serial.println(mpu->getDeviceID());
 
 	// load and configure the DMP
 	Serial.println(F("Initializing DMP..."));
 #endif
 	devStatus = mpu->dmpInitialize();
-
 	/*
 	 * Those offsets are specific to each MPU6050 device.
 	 * they are found via calibration process.
@@ -154,7 +143,6 @@ void Mpu6050MotionManager::Init() {
 						"Enabling interrupt detection (Arduino external interrupt 0)..."));
 #endif
 		attachInterrupt(mClashInt, clashInterupt, RISING);
-		mpuIntStatus = mpu->getIntStatus();
 
 		// set our DMP Ready flag so the main loop() function knows it's okay to use it
 #ifdef DEBUG_MPU
@@ -180,24 +168,33 @@ void Mpu6050MotionManager::Init() {
 	// INT_PIN_CFG register
 	// in the working code of MPU6050_DMP all bits of the INT_PIN_CFG are false (0)
 
-	mpu->setInterruptMode(false); // INT_PIN_CFG register INT_LEVEL (0-active high, 1-active low)
-	mpu->setInterruptDrive(false); // INT_PIN_CFG register INT_OPEN (0-push/pull, 1-open drain)
-	mpu->setInterruptLatch(false); // INT_PIN_CFG register LATCH_INT_EN (0 - emits 50us pulse upon trigger, 1-pin is held until int is cleared)
-	mpu->setInterruptLatchClear(false); // INT_PIN_CFG register INT_RD_CLEAR (0-clear int only on reading int status reg, 1-any read clears int)
-	mpu->setFSyncInterruptLevel(false);
-	mpu->setFSyncInterruptEnabled(false);
-	mpu->setI2CBypassEnabled(false);
+//	mpu->setInterruptMode(false); // INT_PIN_CFG register INT_LEVEL (0-active high, 1-active low)
+//	mpu->setInterruptDrive(false); // INT_PIN_CFG register INT_OPEN (0-push/pull, 1-open drain)
+//	mpu->setInterruptLatch(false); // INT_PIN_CFG register LATCH_INT_EN (0 - emits 50us pulse upon trigger, 1-pin is held until int is cleared)
+//	mpu->setInterruptLatchClear(false); // INT_PIN_CFG register INT_RD_CLEAR (0-clear int only on reading int status reg, 1-any read clears int)
+//	mpu->setFSyncInterruptLevel(false);
+//	mpu->setFSyncInterruptEnabled(false);
+//	mpu->setI2CBypassEnabled(false);
+//	mpu->setI2CMasterModeEnabled(0);
+//	mpu->setI2CBypassEnabled(1);
+//	mpu->setTempSensorEnabled(true);
 	// Enable/disable interrupt sources - enable only motion interrupt
-	mpu->setIntFreefallEnabled(false);
+//	mpu->setIntFreefallEnabled(false);
+//	mpu->setIntFIFOBufferOverflowEnabled(false);
+//	mpu->setIntI2CMasterEnabled(false);
+//	mpu->setIntDataReadyEnabled(false);
+//	mpu->setFullScaleGyroRange(0); //0: 250deg/s | 1: 500deg/s | 2: 1000deg/s | 3: 2000deg/s
+//	mpu->setFullScaleAccelRange(0); //0: 2g | 1: 4g | 2: 8g | 3: 16g
+//	mpu->setIntZeroMotionEnabled(false);
+//	mpu->setZeroMotionDetectionThreshold(18); // 1mg/LSB
+//	mpu->setZeroMotionDetectionDuration(1); // number of consecutive samples above threshold to trigger int
+//	mpu->setDLPFMode(3);
+//	mpu->setDHPFMode(0);
 	mpu->setIntMotionEnabled(true); // INT_ENABLE register enable interrupt source  motion detection
-	mpu->setIntZeroMotionEnabled(false);
-	mpu->setIntFIFOBufferOverflowEnabled(false);
-	mpu->setIntI2CMasterEnabled(false);
-	mpu->setIntDataReadyEnabled(false);
 	mpu->setMotionDetectionThreshold(10); // 1mg/LSB
 	mpu->setMotionDetectionDuration(2); // number of consecutive samples above threshold to trigger int
-	mpuIntStatus = mpu->getIntStatus();
-#ifdef LS_CLASH_DEBUG
+
+#ifdef DEBUG_MPU
 	Serial.println("MPU6050 register setup:");
 	Serial.print("INT_PIN_CFG\t");
 	Serial.print(mpu->getInterruptMode());
@@ -230,21 +227,44 @@ void Mpu6050MotionManager::Init() {
 	/***** MP6050 MOTION DETECTOR INITIALISATION  *****/
 }
 
-bool Mpu6050MotionManager::IsSwing()
-{
+bool Mpu6050MotionManager::IsSwing() {
 #ifdef DEBUG_MPU
-	Serial.println(quaternion->w);
+	if (rotation->w <=0.999) {
+		Serial.print(F("curOrientation\t\tw="));
+		Serial.print(curOrientation->getNormalized().w);
+		Serial.print(F("\t\tx="));
+		Serial.print(curOrientation->getNormalized().x);
+		Serial.print(F("\t\ty="));
+		Serial.print(curOrientation->getNormalized().y);
+		Serial.print(F("\t\tz="));
+		Serial.print(curOrientation->getNormalized().z);
+		Serial.print(F("\t\tcurRotation\t\tw="));
+		Serial.print(curRotation->getNormalized().w);
+		Serial.print(F("\t\tx="));
+		Serial.print(curRotation->getNormalized().x);
+		Serial.print(F("\t\ty="));
+		Serial.print(curRotation->getNormalized().y);
+		Serial.print(F("\t\tz="));
+		Serial.println(curRotation->getNormalized().z);
+	}
 #endif
-	return abs(quaternion->w) > mpTolData->mSwingSmall;
+	return abs(curRotation->w) <= mpTolData->mSwingSmall //<= detect a movement...
+			// ...but refuse to trigger event on pure blade axis rotations
+			and not (abs(prevRotation->x - curRotation->x)
+					> abs(prevRotation->y - curRotation->y)
+					and abs(prevRotation->x - curRotation->x)
+							> abs(prevRotation->z - curRotation->z));
 }
 
 bool Mpu6050MotionManager::IsClash() {
+#ifdef DEBUG_MPU
+	if (mpuIntStatus > 60 and mpuIntStatus < 70)
+	Serial.println(mpuIntStatus);
+#endif
 	return mpuIntStatus > 60 and mpuIntStatus < 70;
 }
 
 void Mpu6050MotionManager::Update() {
-	long multiplier = 1000;
-
 // if programming failed, don't try to do anything
 	if (!dmpReady)
 		return;
@@ -283,28 +303,25 @@ void Mpu6050MotionManager::Update() {
 // (this lets us immediately read more without waiting for an interrupt)
 		mpuFifoCount -= packetSize;
 
-//Save last values
-		quaternion_last->w = quaternion_reading->w;
+//Making the last orientation the reference for next rotation
+		*prevOrientation = curOrientation->getConjugate();
 
-//		aaWorld_last = aaWorld_reading;
+//retrieve current orientation value
+		mpu->dmpGetQuaternion(curOrientation, fifoBuffer);
 
-//retrieve values
-		mpu->dmpGetQuaternion(quaternion_reading, fifoBuffer);
-
-
-//We multiply by multiplier to obtain a more precise detection
-		quaternion->w = quaternion_reading->w * multiplier
-				- quaternion_last->w * multiplier;
-		/*
-		 * Keeping those in case we want to add some fine grain
-		 * movement detection
-		 */
-//		quaternion->x = quaternion_reading->x * multiplier
-//				- quaternion_last->x * multiplier;
-//		quaternion->y = quaternion_reading->y * multiplier
-//				- quaternion_last->y * multiplier;
-//		quaternion->z = quaternion_reading->z * multiplier
-//				- quaternion_last->z * multiplier;
+//We calculate the rotation quaternion since last orientation
+		*prevRotation = *curRotation;
+		*curRotation = prevOrientation->getProduct(
+				curOrientation->getNormalized());
 	}
 }
-#endif //BUILD_MPU6050
+
+EMagnitudes Mpu6050MotionManager::GetSwingMagnitude() {
+	if (curRotation->w < mpTolData->mSwingMedium) {  // below 16 degrees rotations
+		return eeLarge;
+	} else if (curRotation->w >= mpTolData->mSwingMedium and curRotation->w < mpTolData->mSwingSmall) { // between 16 and 51,5 degrees rotations
+		return eeMedium;
+	} else if (curRotation->w >= mpTolData->mSwingSmall) { // above 51,5 degrees rotations
+		return eeSmall;
+	}
+}

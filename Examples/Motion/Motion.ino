@@ -25,9 +25,12 @@
 #include <Wire.h>
 #include <USaber.h>
 
-#define SMALL_TRESHOLD   5
-#define MEDIUM_TRESHOLD  9
-#define LARGE_TRESHOLD  18
+
+
+#define SMALL_TRESHOLD   0.999f
+#define MEDIUM_TRESHOLD  0.99f
+#define LARGE_TRESHOLD   0.98f
+
 
 //Tolerance threshold data for MPU6050 motion manager
 MPU6050TolData gToleranceData;
@@ -41,14 +44,17 @@ void TestMotion(AMotionManager* apMotion)
 	apMotion->Init();
 
 	unsigned long lTestStartTime = millis();
+	unsigned long swingSuppress = 0;
+	unsigned long clashSuppress = 0;
 
 	//Run the test for 30 seconds
 	while(millis() - lTestStartTime <= 30000)
 	{
 		apMotion->Update();
 
-		if(apMotion->IsSwing())
+		if(apMotion->IsSwing() and millis() - swingSuppress > 400 )
 		{
+			swingSuppress = millis();
 			Serial.print("Swing detected:");
 			switch(apMotion->GetSwingMagnitude())
 			{
@@ -65,10 +71,12 @@ void TestMotion(AMotionManager* apMotion)
 				Serial.println("Unknown");
 				break;
 			}
+
 		}
 
-		if(apMotion->IsClash())
+		if(apMotion->IsClash() and millis() - clashSuppress > 400)
 		{
+			clashSuppress = millis();
 			Serial.print("Clash detected:");
 			switch(apMotion->GetClashMagnitude())
 			{

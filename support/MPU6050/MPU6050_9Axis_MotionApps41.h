@@ -33,7 +33,7 @@ THE SOFTWARE.
 #ifndef _MPU6050_9AXIS_MOTIONAPPS41_H_
 #define _MPU6050_9AXIS_MOTIONAPPS41_H_
 
-#include "I2Cdev.h"
+#include "../I2Cdev/I2Cdev.h"
 #include "helper_3dmath.h"
 
 // MotionApps 4.1 DMP implementation, built using the MPU-9150 "MotionFit" board
