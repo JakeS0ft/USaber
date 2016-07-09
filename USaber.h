@@ -36,6 +36,7 @@
 #include "blade/SingleLedBlade.h"
 #include "blade/CrossGuardBlade.h"
 #include "blade/StringBlade.h"
+#include "blade/RGBBlade.h"
 
 //Motion managers
 #include "motion/AMotionManager.h" //Abstract base class
