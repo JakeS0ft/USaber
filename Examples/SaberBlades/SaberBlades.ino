@@ -117,6 +117,122 @@ void TestBlade(IBladeManager* apBlade)
 }
 
 /**
+ * This function runs RGB-specific tests such as color mixing.
+ */
+void RGBTests(IBladeManager* apBlade)
+{
+	  //Do special test cases for RGB blade
+	  Serial.println("\n\nRGB mixed color Power Up 1 (2000)");
+	  apBlade->SetChannel(255, 0);
+	  apBlade->SetChannel(128, 1);
+	  apBlade->SetChannel(0, 2);
+	  while(!apBlade->PowerUp(2000))
+	  {
+		  //Wait for power up
+	  }
+
+	  delay(500);
+	  Serial.println("\n\nRGB mixed color Power Down 1 (2000)");
+	  while(!apBlade->PowerDown(2000))
+	  {
+		  //Wait for power down
+	  }
+	  delay(1000);
+
+	  Serial.println("\n\nRGB mixed color Power Up 2 (2000)");
+	  apBlade->SetChannel(0, 0);
+	  apBlade->SetChannel(128, 1);
+	  apBlade->SetChannel(255, 2);
+	  while(!apBlade->PowerUp(2000))
+	  {
+		  //Wait for power up
+	  }
+
+	  delay(500);
+	  Serial.println("\n\nRGB mixed color Power Down 2 (2000)");
+	  while(!apBlade->PowerDown(2000))
+	  {
+		  //Wait for power down
+	  }
+	  delay(1000);
+
+	  Serial.println("\n\nRGB full spectrum test");
+
+	  //Turn on the first channel fully
+	  apBlade->SetChannel(255, 0);
+	  apBlade->PerformIO();
+
+	  Serial.println("Mixing channel 0 with channel 1...");
+	  //Ramp up channel 1 with channel 0 on full
+	  for(int lLvl = 0; lLvl <= 255; lLvl++)
+	  {
+		  apBlade->SetChannel(255, 0);
+		  apBlade->SetChannel(lLvl, 1);
+		  apBlade->SetChannel(0, 2);
+		  apBlade->PerformIO();
+		  delay(10);
+	  }
+
+	  //Ramp down channel 0
+	  for(int lLvl = 255; lLvl >= 0; lLvl--)
+	  {
+		  apBlade->SetChannel(lLvl, 0);
+		  apBlade->SetChannel(255, 1);
+		  apBlade->SetChannel(0, 2);
+		  apBlade->PerformIO();
+		  delay(10);
+	  }
+
+	  Serial.println("Mixing channel 1 with channel 2...");
+	  //Ramp up channel 2
+	  for(int lLvl = 0; lLvl <= 255; lLvl++)
+	  {
+		  apBlade->SetChannel(0, 0);
+		  apBlade->SetChannel(255, 1);
+		  apBlade->SetChannel(lLvl, 2);
+		  apBlade->PerformIO();
+		  delay(10);
+	  }
+
+	  //Ramp down channel 1
+	  for(int lLvl = 255; lLvl >= 0; lLvl--)
+	  {
+		  apBlade->SetChannel(0, 0);
+		  apBlade->SetChannel(lLvl, 1);
+		  apBlade->SetChannel(255, 2);
+		  apBlade->PerformIO();
+		  delay(10);
+	  }
+
+	  Serial.println("Mixing channel 0 with channel 2...");
+	  //Ramp up channel 0
+	  for(int lLvl = 0; lLvl <= 255; lLvl++)
+	  {
+		  apBlade->SetChannel(lLvl, 0);
+		  apBlade->SetChannel(0, 1);
+		  apBlade->SetChannel(255, 2);
+		  apBlade->PerformIO();
+		  delay(10);
+	  }
+
+	  //Ramp down channel 2
+	  for(int lLvl = 255; lLvl >= 0; lLvl--)
+	  {
+		  apBlade->SetChannel(255, 0);
+		  apBlade->SetChannel(0, 1);
+		  apBlade->SetChannel(lLvl, 2);
+		  apBlade->PerformIO();
+		  delay(10);
+	  }
+
+	  delay(500);
+
+	  apBlade->Off();
+
+	  Serial.println("RGB full spectrum test complete.");
+}
+
+/**
  * The setup function is called once at startup of the sketch
  */
 void setup()
@@ -151,6 +267,12 @@ void loop()
   TestBlade(lpBlade);
   delete lpBlade;
   
+  Serial.println("\n\nTesting RGBBlade");
+  lpBlade = new RGBBlade(LED_PIN1, LED_PIN2, LED_PIN3);
+  TestBlade(lpBlade);
+  RGBTests(lpBlade); //Runs RGBBlade specific tests
+  delete lpBlade;
+
   delay(5000);
 
 }
