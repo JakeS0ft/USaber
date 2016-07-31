@@ -31,6 +31,8 @@
 
 //Tolerance threshold data for MPU6050 motion manager
 MPU6050TolData gToleranceData;
+//Calibration data for MPU6050 motion manager
+MPU6050CalibrationData gMpuCalData;
 
 /**
  * This function will test a motion manager. Run it in a loop and use
@@ -99,6 +101,15 @@ void setup()
 	gToleranceData.mSwingMedium = MEDIUM_TRESHOLD;
 	gToleranceData.mSwingSmall  = SMALL_TRESHOLD;
 
+	//Set MPU6050 calibration data here.
+	//Tweak as needed to improve accuracy
+	gMpuCalData.mAccelXOffset = -1848;
+	gMpuCalData.mAccelYOffset = -5409;
+	gMpuCalData.mAccelZOffset = 1640;
+	gMpuCalData.mGyXOffset = -5;
+	gMpuCalData.mGyYOffset = 48;
+	gMpuCalData.mGyZOffset = 23;
+
 	Serial.begin(9600);
 }
 
@@ -120,9 +131,7 @@ void loop()
 
 	/** MPU6050 Devices (Uncomment to test MPU6050 Motion Manager) **/
 	Serial.println("Testing MPU6050MotionManager");
-	AMotionManager* lpMotion = new Mpu6050MotionManager(&gToleranceData);
-
-	lpMotion->Init();
+	AMotionManager* lpMotion = new Mpu6050MotionManager(&gToleranceData, &gMpuCalData);
 
 	TestMotion(lpMotion);
 	Serial.println("Test ends.");

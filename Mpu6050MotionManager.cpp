@@ -75,16 +75,22 @@ void clashInterupt()
  * Constructor.
  * Args:
  */
-Mpu6050MotionManager::Mpu6050MotionManager(MPU6050TolData* apTolData) :
+Mpu6050MotionManager::Mpu6050MotionManager(MPU6050TolData* apTolData,  MPU6050CalibrationData* apCalData) :
 		dmpReady(false),
-		mpTolData(apTolData)
+		mpTolData(apTolData),
+		mpCalData(apCalData)
 {
 	mpu = new MPU6050();
 	quaternion_reading = new Quaternion();
 	quaternion_last = new Quaternion();
 	quaternion = new Quaternion();
 
-	Init();
+	//These default values will be set in Init()
+	mpuFifoCount = 0;
+	packetSize = 0;
+	devStatus = 0;
+	mpuIntStatus = 0;
+
 }
 
 /**
@@ -132,12 +138,26 @@ void Mpu6050MotionManager::Init() {
 	 * they are found via calibration process.
 	 * See this script http://www.i2cdevlib.com/forums/index.php?app=core&module=attach&section=attach&attach_id=27
 	 */
-	mpu->setXAccelOffset(XACCELOFFSET);
-	mpu->setYAccelOffset(YACCELOFFSET);
-	mpu->setZAccelOffset(ZACCELOFFSET);
-	mpu->setXGyroOffset(XGYROOFFSET);
-	mpu->setYGyroOffset(YGYROOFFSET);
-	mpu->setZGyroOffset(ZGYROOFFSET);
+	if(NULL != this->mpCalData)
+	{
+		//Use user-specified calibration data
+		mpu->setXAccelOffset(mpCalData->mAccelXOffset);
+		mpu->setYAccelOffset(mpCalData->mAccelYOffset);
+		mpu->setZAccelOffset(mpCalData->mAccelZOffset);
+		mpu->setXGyroOffset(mpCalData->mGyXOffset);
+		mpu->setYGyroOffset(mpCalData->mGyYOffset);
+		mpu->setZGyroOffset(mpCalData->mGyZOffset);
+	}
+	else
+	{
+		//Use defaults
+		mpu->setXAccelOffset(XACCELOFFSET);
+		mpu->setYAccelOffset(YACCELOFFSET);
+		mpu->setZAccelOffset(ZACCELOFFSET);
+		mpu->setXGyroOffset(XGYROOFFSET);
+		mpu->setYGyroOffset(YGYROOFFSET);
+		mpu->setZGyroOffset(ZGYROOFFSET);
+	}
 
 	// make sure it worked (returns 0 if so)
 	if (devStatus == 0) {

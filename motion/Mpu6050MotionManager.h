@@ -25,12 +25,13 @@
 #define MPU6050MOTIONMANAGER_H_
 
 #include "AMotionManager.h"
+#include <Arduino.h>
 
 class MPU6050;
 class Quaternion;
 class VectorInt16;
 
-//Container for define motion tolerance data
+//Container to define motion tolerance data
 struct MPU6050TolData
 {
 	//Tolerance for large swings
@@ -41,6 +42,20 @@ struct MPU6050TolData
 	unsigned int mSwingSmall;
 };
 
+//Container to define calibration data
+struct MPU6050CalibrationData
+{
+	//Accelerometer offsets
+	uint16_t mAccelXOffset;
+	uint16_t mAccelYOffset;
+	uint16_t mAccelZOffset;
+	//Gyro offsets
+	uint16_t mGyXOffset;
+	uint16_t mGyYOffset;
+	uint16_t mGyZOffset;
+
+};
+
 class Mpu6050MotionManager : public AMotionManager
 {
 public:
@@ -48,8 +63,9 @@ public:
 	/**
 	 * Constructor.
 	 * Args: apTolData - Swing tolerance data
+	 *       apCalData - Calibration data. Providing this optional data will improve accuracy.
 	 */
-	Mpu6050MotionManager(MPU6050TolData* apTolData);
+	Mpu6050MotionManager(MPU6050TolData* apTolData, MPU6050CalibrationData* apCalData = NULL);
 
 	/**
 	 * Destructor.
@@ -64,8 +80,6 @@ public:
 	virtual bool IsClash();
 
 	virtual void Update();
-
-
 
 protected :
 
@@ -95,8 +109,9 @@ protected :
 	Quaternion *quaternion;           	   // last readings - actual readings
 
 
-	MPU6050TolData* mpTolData; //Pointer to swing tolerance data
+	MPU6050TolData* mpTolData; //Pointer to motion tolerance data
 
+	MPU6050CalibrationData* mpCalData; //Pointer to calibration data
 
 private :
 
