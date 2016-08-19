@@ -17,11 +17,13 @@ This library provides classes to perform each of these major sub-functions using
 
 ## Supported Hardware
 ### Sound Playback Devices
-WT588D
-DFPlayer
+* WT588D
+* DFPlayer
+ 
+
 ### Motion Detection
-Swing & Clash sensors (generic, but recommend SW-200D and SW-18020P)
-MPU-6050
+* Swing & Clash sensors (generic, but recommend SW-200D and SW-18020P)
+* MPU-6050
 
 ## Blades
 
@@ -102,3 +104,8 @@ Update()
 Detects motion with an MPU-6050 Accelerometer + Gyro MPU.
 ### SimpleMotionManager
 Detects motion with swing (tilt) and clash (impact) switches.
+
+##Videos
+Arduino Saber with ATTiny85 and WT588D
+
+[![Arduino Saber with ATTiny85 and WT588D] (https://i.ytimg.com/vi/cuFtVQqLWX0/hqdefault.jpg?custom=true&w=336&h=188&stc=true&jpg444=true&jpgq=90&sp=68&sigh=9_fkhpRB-PIi4VJ7V15Ql1q142s)](https://www.youtube.com/watch?v=cuFtVQqLWX0)
