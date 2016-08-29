@@ -77,13 +77,13 @@ Stop()
 ### DFPlayerSoundPlayer
 Plays sounds using DFPlayer mini MP3 player from DFRobot. (http://www.dfrobot.com/wiki/index.php/DFPlayer_Mini_SKU:DFR0299)
 
+### DIYinoSoundPlayer
+SoundPlayer for the DIYino prop board. 
+(http://www.fx-sabers.com/forum/index.php?topic=49722.0)
+
 ### WT588DSoundPlayer
 Plays sounds using the Wayronic's WT588D sound module.
 (http://www.waytronic.com/voicemodule_show.asp?/35.html)
-
-
-
-(TBD)
 
 ## Motion Managers
 
@@ -104,6 +104,9 @@ Update()
 Detects motion with an MPU-6050 Accelerometer + Gyro MPU.
 ### SimpleMotionManager
 Detects motion with swing (tilt) and clash (impact) switches.
+
+## Build Control
+It is possible to streamline or control the build somewhat by editing the *USaberConfig.h* file. Some features are not cross compatable and others may lead to bloated hex file sizes. The latter may not matter for your project, but the former definately will. If you are having build issues, make sure the feature is enabled in this file or try disabiling some features that you aren't using. A best attempt is made in the comments of the file itself to track cross-compatability issues with the various features.
 
 ##Videos
 Arduino Saber with ATTiny85 and WT588D
