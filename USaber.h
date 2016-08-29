@@ -54,4 +54,8 @@
 #include "sound/DFPlayerSoundPlayer.h"
 #endif
 
+#ifdef BUILD_DIYINOSOUNDPLAYER
+#include "sound/DIYinoSoundPlayer.h"
+#endif
+
 #endif

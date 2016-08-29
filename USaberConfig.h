@@ -65,13 +65,23 @@
  * Note: This must be included for the DFPlayerSouundPlayer to build.
  * Note: Some other features may not work if this is excluded from the build.
  */
-#define BUILD_SOFTWARE_SERIAL
+//#define BUILD_SOFTWARE_SERIAL
 
 /**
  * Build the DFPlayerSoundPlayer.
  * Note: Software serial must also be enabled for this to work.
+ * Note2: Mutually exclusive with DIYinoSoundPlayer.
  */
-#define BUILD_DFPLAYERSOUNDPLAYER
+//#define BUILD_DFPLAYERSOUNDPLAYER
+
+/**
+ * Build the DIYinoSoundPlayer.
+ * Note: Incompatible with SoftwareSerial. Only build this if not
+ * using SoftwareSerial in your project.
+ * Note2: Incompatible with DFPlayerSoundPlayer. Disable this if
+ * using DFPlayerSoundPlayer and only build one of them.
+ */
+#define BUILD_DIYINOSOUNDPLAYER
 
 /**
  * Try to automatically include the Wire library.
