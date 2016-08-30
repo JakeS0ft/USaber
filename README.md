@@ -19,8 +19,8 @@ This library provides classes to perform each of these major sub-functions using
 ### Sound Playback Devices
 * WT588D
 * DFPlayer
+* DIYino
  
-
 ### Motion Detection
 * Swing & Clash sensors (generic, but recommend SW-200D and SW-18020P)
 * MPU-6050
