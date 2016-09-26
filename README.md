@@ -112,3 +112,7 @@ It is possible to streamline or control the build somewhat by editing the *USabe
 Arduino Saber with ATTiny85 and WT588D
 
 [![Arduino Saber with ATTiny85 and WT588D] (https://i.ytimg.com/vi/cuFtVQqLWX0/hqdefault.jpg?custom=true&w=336&h=188&stc=true&jpg444=true&jpgq=90&sp=68&sigh=9_fkhpRB-PIi4VJ7V15Ql1q142s)](https://www.youtube.com/watch?v=cuFtVQqLWX0)
+
+Color Change Saber with DIYino
+
+[![Arduino Saber with DIYino] (https://i.ytimg.com/vi/-mzwswVP-_k/hqdefault.jpg?custom=true&w=336&h=188&stc=true&jpg444=true&jpgq=90&sp=68&sigh=1gtYF6e0i89uI1B60G7QsCUM1XI)](https://www.youtube.com/watch?v=-mzwswVP-_k)
