@@ -84,7 +84,7 @@ bool SingleLedBlade::PowerUp(int aRampTime)
 
 void SingleLedBlade::ApplyFlicker(int aEffect)
 {
-	static int lLastUpdate;
+	static unsigned long lLastUpdate;
 
 	switch(aEffect)
 	{

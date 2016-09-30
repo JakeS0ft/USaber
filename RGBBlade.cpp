@@ -36,6 +36,7 @@ RGBBlade::RGBBlade(int aCh1Pin, int aCh2Pin, int aCh3Pin)
 	}
 
 	mIsOn = false;
+	mLastFlickerUpdate = 0;
 }
 
 RGBBlade::~RGBBlade()
@@ -126,7 +127,27 @@ bool RGBBlade::PowerDown(int aRampTime)
 
 void RGBBlade::ApplyFlicker(int aType)
 {
-	//Do nothing
+	static unsigned long lLastUpdate;
+
+
+	switch(aType)
+	{
+	case 0:
+		//Do nothing
+		break;
+	case 1: //Random flicker
+		RandomFlicker(80, 100, 20);
+		break;
+	case 2:
+		RandomFlicker(60, 100, 20);
+		break;
+	case 3:
+		RandomFlicker(50, 100, 50);
+		break;
+	default:
+		//Do nothing
+		break;
+	}
 }
 
 void RGBBlade::PerformIO()
@@ -145,7 +166,47 @@ BladeMetadata RGBBlade::GetFeatures()
 	BladeMetadata lData;
 
 	lData.Channels = 3;
-	lData.Flickers = 0;
+	lData.Flickers = 4;
 
 	return lData;
+}
+
+void RGBBlade::RandomFlicker(int aLowerBound, int aUpperBound, unsigned int aUpdatePeriod)
+{
+	unsigned char lTempPowerLevels[3];
+
+	//Compensate for values too high
+	if(aLowerBound > 100)
+	{
+		aLowerBound = 100;
+	}
+	if(aUpperBound > 100)
+	{
+		aUpperBound = 100;
+	}
+
+	if(millis() - mLastFlickerUpdate > aUpdatePeriod)
+	{
+		//Generate a random number between lower and upper bounds
+		int lRandomModifier = random(aLowerBound, aUpperBound);
+		//Convert the integer value to a floating point number
+		float lRandomMultiplier = ((float)lRandomModifier)/100;
+
+		for(int lChnl = 0; lChnl < 3; lChnl++)
+		{
+			float lTempPowerLevel = (float)mPowerLevels[lChnl] * lRandomMultiplier;
+			lTempPowerLevels[lChnl] = (unsigned char)lTempPowerLevel;
+		}
+
+		//Do I/O to make flicker take effect
+		for(int lIdx = 0; lIdx < 3; lIdx++)
+		{
+			if(mLedPins[lIdx] > 0)
+			{
+				analogWrite(mLedPins[lIdx], lTempPowerLevels[lIdx]);
+			}
+		}
+
+		mLastFlickerUpdate = millis();
+	}
 }

@@ -55,6 +55,15 @@ public:
 	virtual BladeMetadata GetFeatures();
 
 protected:
+	/**
+	 * Applies random flicker while keeping color balance.
+	 *  Args:
+	 *   aLowerBound - Lowest number as a percentage of set point (100 = full on, 0 = full off)
+	 *   aUpperBound - Highest number as a percentage of set point (100 = full on, 0 = full off)
+	 *   aUpdatePeroid - How often (in milliseconds) to apply a new random power level
+	 */
+	void RandomFlicker(int aLowerBound, int aUpperBound, unsigned int aUpdatePeriod);
+
 	//I/O Pins that control the LEDs
 	int mLedPins[3];
 	//Target power levels for LEDs
@@ -64,6 +73,8 @@ protected:
 
 	//Blade features
 	BladeMetadata mFeatures;
+
+	unsigned long mLastFlickerUpdate;
 };
 
 
