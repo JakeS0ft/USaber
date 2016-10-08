@@ -41,6 +41,7 @@
 //Motion managers
 #include "motion/AMotionManager.h" //Abstract base class
 #include "motion/SimpleMotionManager.h"
+#include "motion/ADXL335MotionManager.h"
 
 #ifdef BUILD_MPU6050
 #include "motion/Mpu6050MotionManager.h"
