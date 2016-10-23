@@ -24,6 +24,7 @@ This library provides classes to perform each of these major sub-functions using
 ### Motion Detection
 * Swing & Clash sensors (generic, but recommend SW-200D and SW-18020P)
 * MPU-6050
+* ADXL335
 
 ## Blades
 
@@ -104,6 +105,8 @@ Update()
 Detects motion with an MPU-6050 Accelerometer + Gyro MPU.
 ### SimpleMotionManager
 Detects motion with swing (tilt) and clash (impact) switches.
+### ADXL335MotionManager
+Detects motion with an ADXL335 Accelerometer
 
 ## Build Control
 It is possible to streamline or control the build somewhat by editing the *USaberConfig.h* file. Some features are not cross compatable and others may lead to bloated hex file sizes. The latter may not matter for your project, but the former definately will. If you are having build issues, make sure the feature is enabled in this file or try disabiling some features that you aren't using. A best attempt is made in the comments of the file itself to track cross-compatability issues with the various features.
