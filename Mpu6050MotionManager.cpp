@@ -85,6 +85,8 @@ Mpu6050MotionManager::Mpu6050MotionManager(MPU6050TolData* apTolData,  MPU6050Ca
 	quaternion_last = new Quaternion();
 	quaternion = new Quaternion();
 
+	mSwingMagnitude = eeSmall;
+
 	//These default values will be set in Init()
 	mpuFifoCount = 0;
 	packetSize = 0;
@@ -250,12 +252,33 @@ void Mpu6050MotionManager::Init() {
 	/***** MP6050 MOTION DETECTOR INITIALISATION  *****/
 }
 
-bool Mpu6050MotionManager::IsSwing()
-{
+EMagnitudes Mpu6050MotionManager::GetSwingMagnitude() {
+	return mSwingMagnitude;
+}
+
+bool Mpu6050MotionManager::IsSwing() {
 #ifdef DEBUG_MPU
 	Serial.println(quaternion->w);
 #endif
-	return abs(quaternion->w) > mpTolData->mSwingSmall;
+
+	bool lSwingDetected = false;
+	long absSwingMagnitude = abs(quaternion->w);
+
+	if (absSwingMagnitude > mpTolData->mSwingSmall) {
+		lSwingDetected = true;
+
+		mSwingMagnitude = eeSmall;
+
+		if (absSwingMagnitude >= mpTolData->mSwingMedium) {
+			mSwingMagnitude = eeMedium;
+		}
+
+		if (absSwingMagnitude >= mpTolData->mSwingLarge) {
+			mSwingMagnitude = eeLarge;
+		}
+	}
+
+	return lSwingDetected;
 }
 
 bool Mpu6050MotionManager::IsClash() {

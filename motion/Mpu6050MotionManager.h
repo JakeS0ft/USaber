@@ -81,6 +81,8 @@ public:
 
 	virtual void Update();
 
+	virtual EMagnitudes GetSwingMagnitude();
+
 protected :
 
 
@@ -99,7 +101,6 @@ protected :
 
 	unsigned int mpuFifoCount;     // count of all bytes currently in FIFO
 
-
 	MPU6050 *mpu;
 
 	// orientation/motion vars
@@ -112,6 +113,9 @@ protected :
 	MPU6050TolData* mpTolData; //Pointer to motion tolerance data
 
 	MPU6050CalibrationData* mpCalData; //Pointer to calibration data
+
+	//Magnitude of last swing
+	EMagnitudes mSwingMagnitude;
 
 private :
 
