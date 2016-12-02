@@ -297,7 +297,7 @@ void loop()
 			{
 				delay(100);
 			}
-			gSaberIsOn = false; //Now the saber is on
+			gSaberIsOn = false; //Now the saber is off
 		}
 		else
 		{
