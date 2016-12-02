@@ -149,10 +149,11 @@ public:
 		this->mp3Serial = new DIYinoSoundSerial(receivePin, transmitPin);
 
 		this->mp3Serial->begin(9600);
-		reset();
-		while (not this->mp3Serial->available()) {
-			//waiting for device to be ready
-		}
+//Removing this reset and wait routine. It's not necessary and causes a pop on boot
+//		reset();
+//		while (not this->mp3Serial->available()) {
+//			//waiting for device to be ready
+//		}
 		//if (this->mp3Serial->available()) {
 #ifdef DFPLAYER_INFO
 		Serial.println(F("Connected to DFPlayer !"));
