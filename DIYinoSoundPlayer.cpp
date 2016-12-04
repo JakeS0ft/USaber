@@ -218,8 +218,8 @@ bool DIYinoSoundPlayer::PlaySound(ESoundTypes aSoundType, unsigned char aIndex)
 	lSoundIndex += mpSoundMap->Locations.BaseAddr;
 
 	//Compensate for selected font (but not for menu and boot sounds)
-	if(aSoundType != ESoundTypes::eeBootSnd &&
-		aSoundType != ESoundTypes::eeMenuSoundSnd)
+	if(aSoundType != eeBootSnd &&
+		aSoundType != eeMenuSoundSnd)
 	{
 		lSoundIndex += (mSoundsPerFont * mFontIdx);
 	}
