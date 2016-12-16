@@ -75,8 +75,9 @@ SetFont()
 SetVolume()
 Stop()
 
-### DFPlayerSoundPlayer
+### DFPlayerSoundPlayer[Depreciated]
 Plays sounds using DFPlayer mini MP3 player from DFRobot. (http://www.dfrobot.com/wiki/index.php/DFPlayer_Mini_SKU:DFR0299)
+Note: This class is only known to work with modules with built-in Flash and won't work with SD card versions. DIYinoSoundPlayer is perfered is more proven to work with the SD-card-based modules.
 
 ### DIYinoSoundPlayer
 SoundPlayer for the DIYino prop board. 
