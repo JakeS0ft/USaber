@@ -97,7 +97,7 @@ void setup()
 
 	//Set MPU6050 swing tolerance threasholds here.
 	//Tweak as needed to adjust sensitivity
-	gToleranceData.mSwingLarge  = SMALL_TRESHOLD;
+	gToleranceData.mSwingLarge  = LARGE_TRESHOLD;
 	gToleranceData.mSwingMedium = MEDIUM_TRESHOLD;
 	gToleranceData.mSwingSmall  = SMALL_TRESHOLD;
 

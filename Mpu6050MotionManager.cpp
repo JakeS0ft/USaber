@@ -262,9 +262,10 @@ bool Mpu6050MotionManager::IsSwing() {
 #endif
 
 	bool lSwingDetected = false;
-	long absSwingMagnitude = abs(quaternion->w);
+	unsigned long absSwingMagnitude = abs(quaternion->w);
 
 	if (absSwingMagnitude > mpTolData->mSwingSmall) {
+
 		lSwingDetected = true;
 
 		mSwingMagnitude = eeSmall;
