@@ -543,32 +543,102 @@ uint8_t MPU6050::dmpInitialize() {
     return 0; // success
 }
 
+uint8_t MPU6050::dmpInitialize_light() {
+// reset device
+    DEBUG_PRINTLN(F("\n\nResetting MPU6050..."));
+    reset();
+    delay(30); // wait after reset
+
+    // disable sleep mode
+    setSleepEnabled(false);
+
+    // load DMP code into memory banks
+    DEBUG_PRINT(F("Writing DMP code to MPU memory banks ("));
+    DEBUG_PRINT(MPU6050_DMP_CODE_SIZE);
+    DEBUG_PRINTLN(F(" bytes)"));
+    if (writeProgMemoryBlock(dmpMemory, MPU6050_DMP_CODE_SIZE)) {
+        DEBUG_PRINTLN(F("Success! DMP code written and verified."));
+
+        // write DMP configuration
+        DEBUG_PRINT(F("Writing DMP configuration to MPU memory banks ("));
+        DEBUG_PRINT(MPU6050_DMP_CONFIG_SIZE);
+        DEBUG_PRINTLN(F(" bytes in config def)"));
+        if (writeProgDMPConfigurationSet(dmpConfig, MPU6050_DMP_CONFIG_SIZE)) {
+            DEBUG_PRINTLN(F("Success! DMP configuration written and verified."));
+
+            DEBUG_PRINTLN(F("Setting clock source to Z Gyro..."));
+            setClockSource(MPU6050_CLOCK_PLL_ZGYRO);
+
+            DEBUG_PRINTLN(F("Setting DMP and FIFO_OFLOW interrupts enabled..."));
+            setIntEnabled(0x12);
+
+            DEBUG_PRINTLN(F("Setting sample rate to 200Hz..."));
+            setRate(4); // 1khz / (1 + 4) = 200 Hz
+
+            DEBUG_PRINTLN(F("Setting external frame sync to TEMP_OUT_L[0]..."));
+            setExternalFrameSync(MPU6050_EXT_SYNC_TEMP_OUT_L);
+
+            DEBUG_PRINTLN(F("Setting DLPF bandwidth to 42Hz..."));
+            setDLPFMode(MPU6050_DLPF_BW_42);
+
+            DEBUG_PRINTLN(F("Setting gyro sensitivity to +/- 2000 deg/sec..."));
+            setFullScaleGyroRange(MPU6050_GYRO_FS_2000);
+
+            DEBUG_PRINTLN(F("Setting DMP configuration bytes (function unknown)..."));
+            setDMPConfig1(0x03);
+            setDMPConfig2(0x00);
+
+            DEBUG_PRINTLN(F("Clearing OTP Bank flag..."));
+            setOTPBankValid(false);
+
+            DEBUG_PRINTLN(F("Writing final memory update 1/7 (function unknown)..."));
+            uint8_t dmpUpdate[16], j;
+            uint16_t pos = 0;
+            for (j = 0; j < 4 || j < dmpUpdate[2] + 3; j++, pos++) dmpUpdate[j] = pgm_read_byte(&dmpUpdates[pos]);
+            writeMemoryBlock(dmpUpdate + 3, dmpUpdate[2], dmpUpdate[0], dmpUpdate[1]);
+
+            DEBUG_PRINTLN(F("Writing final memory update 2/7 (function unknown)..."));
+            for (j = 0; j < 4 || j < dmpUpdate[2] + 3; j++, pos++) dmpUpdate[j] = pgm_read_byte(&dmpUpdates[pos]);
+            writeMemoryBlock(dmpUpdate + 3, dmpUpdate[2], dmpUpdate[0], dmpUpdate[1]);
+
+            DEBUG_PRINTLN(F("Enabling FIFO..."));
+            setFIFOEnabled(true);
+
+            DEBUG_PRINTLN(F("Enabling DMP..."));
+            setDMPEnabled(true);
+
+            DEBUG_PRINTLN(F("Resetting DMP..."));
+            resetDMP();
+
+            DEBUG_PRINTLN(F("Writing final memory update 7/7 (function unknown)..."));
+            for (j = 0; j < 4 || j < dmpUpdate[2] + 3; j++, pos++) dmpUpdate[j] = pgm_read_byte(&dmpUpdates[pos]);
+            writeMemoryBlock(dmpUpdate + 3, dmpUpdate[2], dmpUpdate[0], dmpUpdate[1]);
+
+            DEBUG_PRINTLN(F("DMP is good to go! Finally."));
+
+            DEBUG_PRINTLN(F("Disabling DMP (you turn it on later)..."));
+            setDMPEnabled(false);
+
+            DEBUG_PRINTLN(F("Setting up internal 42-byte (default) DMP packet buffer..."));
+            dmpPacketSize = 42;
+
+            DEBUG_PRINTLN(F("Resetting FIFO and clearing INT status one last time..."));
+            resetFIFO();
+            getIntStatus();
+        } else {
+            DEBUG_PRINTLN(F("ERROR! DMP configuration verification failed."));
+            return 2; // configuration block loading failed
+        }
+    } else {
+        DEBUG_PRINTLN(F("ERROR! DMP code verification failed."));
+        return 1; // main binary block loading failed
+    }
+    return 0; // success
+}
+
 bool MPU6050::dmpPacketAvailable() {
     return getFIFOCount() >= dmpGetFIFOPacketSize();
 }
-
-// uint8_t MPU6050::dmpSetFIFORate(uint8_t fifoRate);
-// uint8_t MPU6050::dmpGetFIFORate();
-// uint8_t MPU6050::dmpGetSampleStepSizeMS();
-// uint8_t MPU6050::dmpGetSampleFrequency();
-// int32_t MPU6050::dmpDecodeTemperature(int8_t tempReg);
-
-//uint8_t MPU6050::dmpRegisterFIFORateProcess(inv_obj_func func, int16_t priority);
-//uint8_t MPU6050::dmpUnregisterFIFORateProcess(inv_obj_func func);
-//uint8_t MPU6050::dmpRunFIFORateProcesses();
-
-// uint8_t MPU6050::dmpSendQuaternion(uint_fast16_t accuracy);
-// uint8_t MPU6050::dmpSendGyro(uint_fast16_t elements, uint_fast16_t accuracy);
-// uint8_t MPU6050::dmpSendAccel(uint_fast16_t elements, uint_fast16_t accuracy);
-// uint8_t MPU6050::dmpSendLinearAccel(uint_fast16_t elements, uint_fast16_t accuracy);
-// uint8_t MPU6050::dmpSendLinearAccelInWorld(uint_fast16_t elements, uint_fast16_t accuracy);
-// uint8_t MPU6050::dmpSendControlData(uint_fast16_t elements, uint_fast16_t accuracy);
-// uint8_t MPU6050::dmpSendSensorData(uint_fast16_t elements, uint_fast16_t accuracy);
-// uint8_t MPU6050::dmpSendExternalSensorData(uint_fast16_t elements, uint_fast16_t accuracy);
-// uint8_t MPU6050::dmpSendGravity(uint_fast16_t elements, uint_fast16_t accuracy);
-// uint8_t MPU6050::dmpSendPacketNumber(uint_fast16_t accuracy);
-// uint8_t MPU6050::dmpSendQuantizedAccel(uint_fast16_t elements, uint_fast16_t accuracy);
-// uint8_t MPU6050::dmpSendEIS(uint_fast16_t elements, uint_fast16_t accuracy);
 
 uint8_t MPU6050::dmpGetAccel(int32_t *data, const uint8_t* packet) {
     // TODO: accommodate different arrangements of sent data (ONLY default supported now)
@@ -625,8 +695,7 @@ uint8_t MPU6050::dmpGetQuaternion(Quaternion *q, const uint8_t* packet) {
     }
     return status; // int16 return value, indicates error if this line is reached
 }
-// uint8_t MPU6050::dmpGet6AxisQuaternion(long *data, const uint8_t* packet);
-// uint8_t MPU6050::dmpGetRelativeQuaternion(long *data, const uint8_t* packet);
+
 uint8_t MPU6050::dmpGetGyro(int32_t *data, const uint8_t* packet) {
     // TODO: accommodate different arrangements of sent data (ONLY default supported now)
     if (packet == 0) packet = dmpPacketBuffer;
@@ -635,6 +704,7 @@ uint8_t MPU6050::dmpGetGyro(int32_t *data, const uint8_t* packet) {
     data[2] = (((uint32_t)packet[24] << 24) | ((uint32_t)packet[25] << 16) | ((uint32_t)packet[26] << 8) | packet[27]);
     return 0;
 }
+
 uint8_t MPU6050::dmpGetGyro(int16_t *data, const uint8_t* packet) {
     // TODO: accommodate different arrangements of sent data (ONLY default supported now)
     if (packet == 0) packet = dmpPacketBuffer;
@@ -643,6 +713,7 @@ uint8_t MPU6050::dmpGetGyro(int16_t *data, const uint8_t* packet) {
     data[2] = (packet[24] << 8) | packet[25];
     return 0;
 }
+
 uint8_t MPU6050::dmpGetGyro(VectorInt16 *v, const uint8_t* packet) {
     // TODO: accommodate different arrangements of sent data (ONLY default supported now)
     if (packet == 0) packet = dmpPacketBuffer;
@@ -651,8 +722,7 @@ uint8_t MPU6050::dmpGetGyro(VectorInt16 *v, const uint8_t* packet) {
     v -> z = (packet[24] << 8) | packet[25];
     return 0;
 }
-// uint8_t MPU6050::dmpSetLinearAccelFilterCoefficient(float coef);
-// uint8_t MPU6050::dmpGetLinearAccel(long *data, const uint8_t* packet);
+
 uint8_t MPU6050::dmpGetLinearAccel(VectorInt16 *v, VectorInt16 *vRaw, VectorFloat *gravity) {
     // get rid of the gravity component (+1g = +8192 in standard DMP FIFO packet, sensitivity is 2g)
     v -> x = vRaw -> x - gravity -> x*8192;
@@ -660,7 +730,7 @@ uint8_t MPU6050::dmpGetLinearAccel(VectorInt16 *v, VectorInt16 *vRaw, VectorFloa
     v -> z = vRaw -> z - gravity -> z*8192;
     return 0;
 }
-// uint8_t MPU6050::dmpGetLinearAccelInWorld(long *data, const uint8_t* packet);
+
 uint8_t MPU6050::dmpGetLinearAccelInWorld(VectorInt16 *v, VectorInt16 *vReal, Quaternion *q) {
     // rotate measured 3D acceleration vector into original state
     // frame of reference based on orientation quaternion
@@ -668,21 +738,13 @@ uint8_t MPU6050::dmpGetLinearAccelInWorld(VectorInt16 *v, VectorInt16 *vReal, Qu
     v -> rotate(q);
     return 0;
 }
-// uint8_t MPU6050::dmpGetGyroAndAccelSensor(long *data, const uint8_t* packet);
-// uint8_t MPU6050::dmpGetGyroSensor(long *data, const uint8_t* packet);
-// uint8_t MPU6050::dmpGetControlData(long *data, const uint8_t* packet);
-// uint8_t MPU6050::dmpGetTemperature(long *data, const uint8_t* packet);
-// uint8_t MPU6050::dmpGetGravity(long *data, const uint8_t* packet);
+
 uint8_t MPU6050::dmpGetGravity(VectorFloat *v, Quaternion *q) {
     v -> x = 2 * (q -> x*q -> z - q -> w*q -> y);
     v -> y = 2 * (q -> w*q -> x + q -> y*q -> z);
     v -> z = q -> w*q -> w - q -> x*q -> x - q -> y*q -> y + q -> z*q -> z;
     return 0;
 }
-// uint8_t MPU6050::dmpGetUnquantizedAccel(long *data, const uint8_t* packet);
-// uint8_t MPU6050::dmpGetQuantizedAccel(long *data, const uint8_t* packet);
-// uint8_t MPU6050::dmpGetExternalSensorData(long *data, int size, const uint8_t* packet);
-// uint8_t MPU6050::dmpGetEIS(long *data, const uint8_t* packet);
 
 uint8_t MPU6050::dmpGetEuler(float *data, Quaternion *q) {
     data[0] = atan2(2*q -> x*q -> y - 2*q -> w*q -> z, 2*q -> w*q -> w + 2*q -> x*q -> x - 1);   // psi
@@ -690,6 +752,7 @@ uint8_t MPU6050::dmpGetEuler(float *data, Quaternion *q) {
     data[2] = atan2(2*q -> y*q -> z - 2*q -> w*q -> x, 2*q -> w*q -> w + 2*q -> z*q -> z - 1);   // phi
     return 0;
 }
+
 uint8_t MPU6050::dmpGetYawPitchRoll(float *data, Quaternion *q, VectorFloat *gravity) {
     // yaw: (about Z axis)
     data[0] = atan2(2*q -> x*q -> y - 2*q -> w*q -> z, 2*q -> w*q -> w + 2*q -> x*q -> x - 1);
@@ -699,9 +762,6 @@ uint8_t MPU6050::dmpGetYawPitchRoll(float *data, Quaternion *q, VectorFloat *gra
     data[2] = atan(gravity -> y / sqrt(gravity -> x*gravity -> x + gravity -> z*gravity -> z));
     return 0;
 }
-
-// uint8_t MPU6050::dmpGetAccelFloat(float *data, const uint8_t* packet);
-// uint8_t MPU6050::dmpGetQuaternionFloat(float *data, const uint8_t* packet);
 
 uint8_t MPU6050::dmpProcessFIFOPacket(const unsigned char *dmpData) {
     /*for (uint8_t k = 0; k < dmpPacketSize; k++) {
@@ -713,6 +773,7 @@ uint8_t MPU6050::dmpProcessFIFOPacket(const unsigned char *dmpData) {
     //Serial.println((uint16_t)dmpPacketBuffer);
     return 0;
 }
+
 uint8_t MPU6050::dmpReadAndProcessFIFOPacket(uint8_t numPackets, uint8_t *processed) {
     uint8_t status;
     uint8_t buf[dmpPacketSize];
@@ -729,15 +790,6 @@ uint8_t MPU6050::dmpReadAndProcessFIFOPacket(uint8_t numPackets, uint8_t *proces
     return 0;
 }
 
-// uint8_t MPU6050::dmpSetFIFOProcessedCallback(void (*func) (void));
-
-// uint8_t MPU6050::dmpInitFIFOParam();
-// uint8_t MPU6050::dmpCloseFIFO();
-// uint8_t MPU6050::dmpSetGyroDataSource(uint_fast8_t source);
-// uint8_t MPU6050::dmpDecodeQuantizedAccel();
-// uint32_t MPU6050::dmpGetGyroSumOfSquare();
-// uint32_t MPU6050::dmpGetAccelSumOfSquare();
-// void MPU6050::dmpOverrideQuaternion(long *q);
 uint16_t MPU6050::dmpGetFIFOPacketSize() {
     return dmpPacketSize;
 }

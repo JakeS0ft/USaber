@@ -133,7 +133,7 @@ void Mpu6050MotionManager::Init() {
 	// load and configure the DMP
 	Serial.println(F("Initializing DMP..."));
 #endif
-	devStatus = mpu->dmpInitialize();
+	devStatus = mpu->dmpInitialize_light();
 
 	/*
 	 * Those offsets are specific to each MPU6050 device.
