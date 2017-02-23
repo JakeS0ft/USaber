@@ -52,6 +52,20 @@ public:
 	virtual bool IsClash() = 0;
 
 	/**
+	 * Returns TRUE if the last update cycle detected a twist event.
+	 * Subclasses are expected to provide an overrride if they support this
+	 * optional feature. By default, it will always return FALSE indicating
+	 * no twist has occured.
+	 *
+	 * Returns:
+	 *  TRUE if a twist happened, FALSE otherwise.
+	 */
+	virtual bool IsTwist()
+	{
+		return false;
+	}
+
+	/**
 	 * This method should be called every cycle or at some reasonable interval
 	 * to update the motion detection with the latest sensor readings.
 	 */

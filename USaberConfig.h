@@ -55,6 +55,12 @@
 #define BUILD_MPU6050
 
 /**
+ * Build the MPU6050LiteMotionManager.
+ * Note: This requires the Wire library (included by default with Arduino IDE)
+ */
+#define BUILD_MPU6050LITE
+
+/**
  * Build USaber's built-in I2CDev library.
  * Note: This requires that Wire also be included in the sketch.
  */

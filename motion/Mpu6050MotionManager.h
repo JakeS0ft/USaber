@@ -107,8 +107,10 @@ protected :
 	//  - Quaternion containers [w, x, y, z]
 	Quaternion *quaternion_reading;  // holds the actual readings
 	Quaternion *quaternion_last;     // holds the last readings
-	Quaternion *quaternion;           	   // last readings - actual readings
+	Quaternion *quaternion;          // last readings - actual readings
 
+	unsigned long last_update_time;  // keep track of when the last update happened
+	int last_update_interval;        // keep track of time between the previous two update cycles
 
 	MPU6050TolData* mpTolData; //Pointer to motion tolerance data
 
