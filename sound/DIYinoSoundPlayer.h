@@ -84,7 +84,7 @@ public:
 
 	virtual void Init();
 
-	virtual bool PlaySound(ESoundTypes aSoundType, unsigned char aIndex);
+	virtual bool PlaySound(ESoundTypes aSoundType, uint16_t aIndex);
 
 	virtual bool PlayRandomSound(ESoundTypes aSoundType);
 
@@ -106,7 +106,7 @@ public:
 	 * Args:
 	 *   aFile - Physical address of the file on the storage media.
 	 */
-	virtual void PlayFile(int aFile);
+	virtual void PlayFile(uint16_t aFile);
 
 protected:
 
@@ -116,7 +116,7 @@ protected:
 	 * Args:
 	 *   aFile - Physical address of the file on the storage media.
 	 */
-	virtual void PlayRepeat(int aFile);
+	virtual void PlayRepeat(uint16_t aFile);
 
 	//DF Player does most of the work communicating with the sound chip
 	DFPlayer mDFPlayer;

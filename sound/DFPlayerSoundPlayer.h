@@ -105,7 +105,7 @@ public:
 
 	virtual void Init();
 
-	virtual bool PlaySound(ESoundTypes aSoundType, unsigned char aIndex);
+	virtual bool PlaySound(ESoundTypes aSoundType, uint16_t aIndex);
 
 	virtual bool PlayRandomSound(ESoundTypes aSoundType);
 

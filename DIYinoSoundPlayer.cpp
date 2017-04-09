@@ -76,18 +76,14 @@ void DIYinoSoundPlayer::Init()
 	}
 }
 
-void DIYinoSoundPlayer::PlayFile(int aFile)
+void DIYinoSoundPlayer::PlayFile(uint16_t aFile)
 {
-	uint8_t lFileNumber = (uint8_t)aFile;
-
-	mDFPlayer.playPhysicalTrack(lFileNumber);
+	mDFPlayer.playPhysicalTrack(aFile);
 }
 
-void DIYinoSoundPlayer::PlayRepeat(int aFile)
+void DIYinoSoundPlayer::PlayRepeat(uint16_t aFile)
 {
-	uint8_t lFileNumber = (uint8_t)aFile;
-
-	mDFPlayer.playSingleLoop(lFileNumber);
+	mDFPlayer.playSingleLoop(aFile);
 }
 
 void DIYinoSoundPlayer::SetVolume(int aVolume)
@@ -104,9 +100,9 @@ void DIYinoSoundPlayer::Stop()
 	mDFPlayer.stop();
 }
 
-bool DIYinoSoundPlayer::PlaySound(ESoundTypes aSoundType, unsigned char aIndex)
+bool DIYinoSoundPlayer::PlaySound(ESoundTypes aSoundType, uint16_t aIndex)
 {
-	unsigned char lSoundIndex = mpSoundMap->Locations.BaseAddr;
+	uint16_t lSoundIndex = mpSoundMap->Locations.BaseAddr;
 	bool lSuccess = true;
 
 	switch(aSoundType)

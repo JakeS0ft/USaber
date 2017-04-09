@@ -71,7 +71,7 @@ void WT588DSoundPlayer::Init()
 	}
 }
 
-bool WT588DSoundPlayer::PlaySound(ESoundTypes aSoundType, unsigned char aIndex = 0)
+bool WT588DSoundPlayer::PlaySound(ESoundTypes aSoundType, uint16_t aIndex = 0)
 {
 	unsigned char lSoundIndex = mpSoundMap->Locations.BaseAddr;
 	bool lSuccess = true;

@@ -24,6 +24,8 @@
 #ifndef ASOUNDPLAYER_H_
 #define ASOUNDPLAYER_H_
 
+#include <Arduino.h> //For uint16_t
+
 enum ESoundTypes
 {
 	eeFontIdSnd,
@@ -81,7 +83,7 @@ public:
 	 * Returns:
 	 *  TRUE if successful, FALSE otherwise
 	 */
-	virtual bool PlaySound(ESoundTypes aSoundType, unsigned char aIndex = 0) = 0;
+	virtual bool PlaySound(ESoundTypes aSoundType, uint16_t aIndex = 0) = 0;
 
 	/**
 	 * Play a random sound within the selected category. Subclasses should

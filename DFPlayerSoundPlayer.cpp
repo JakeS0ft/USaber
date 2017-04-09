@@ -142,9 +142,9 @@ void DFPlayerSoundPlayer::Stop()
 	}
 }
 
-bool DFPlayerSoundPlayer::PlaySound(ESoundTypes aSoundType, unsigned char aIndex)
+bool DFPlayerSoundPlayer::PlaySound(ESoundTypes aSoundType, uint16_t aIndex)
 {
-	unsigned char lSoundIndex = mpSoundMap->Locations.BaseAddr;
+	uint16_t lSoundIndex = mpSoundMap->Locations.BaseAddr;
 	bool lSuccess = true;
 
 	switch(aSoundType)
