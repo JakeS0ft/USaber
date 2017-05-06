@@ -55,7 +55,7 @@
 #define BUILD_MPU6050
 
 /**
- * Build the MPU6050LiteMotionManager.
+ * Build the MPU6050LiteMotionManager and MPU6050AdvancedMotionManager.
  * Note: This requires the Wire library (included by default with Arduino IDE)
  */
 #define BUILD_MPU6050LITE

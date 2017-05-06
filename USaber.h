@@ -44,7 +44,8 @@
 #include "motion/ADXL335MotionManager.h"
 
 #ifdef BUILD_MPU6050LITE
-#include "motion/MPU6050LiteMotionManager.h"
+#include "motion/Mpu6050LiteMotionManager.h"
+#include "motion/Mpu6050AdvancedMotionManager.h"
 #endif
 
 #ifdef BUILD_MPU6050
