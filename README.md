@@ -20,6 +20,7 @@ This library provides classes to perform each of these major sub-functions using
 * WT588D
 * DFPlayer
 * DIYino
+* BY8301 (a.k.a. BY8301-16P)
  
 ### Motion Detection
 * Swing & Clash sensors (generic, but recommend SW-200D and SW-18020P)
@@ -103,6 +104,10 @@ SoundPlayer for the DIYino prop board.
 Plays sounds using the Wayronic's WT588D sound module.
 (http://www.waytronic.com/voicemodule_show.asp?/35.html)
 
+### BY8301SoundPlayer
+Plays sounds using a BY8301-16P sound module.
+(I can't seem to find a link to the manufacter website, but you can find them on E-bay)
+
 ## Motion Managers
 
 Motion manager classes are used to detect swing and clash event. A “swing” event means the saber is moving. A “clash” means an impact is detected. The following classes are provided.
@@ -137,7 +142,12 @@ Detects motion with an ADXL335 Accelerometer
 ## Build Control
 It is possible to streamline or control the build somewhat by editing the *USaberConfig.h* file. Some features are not cross compatable and others may lead to bloated hex file sizes. The latter may not matter for your project, but the former definately will. If you are having build issues, make sure the feature is enabled in this file or try disabiling some features that you aren't using. A best attempt is made in the comments of the file itself to track cross-compatability issues with the various features.
 
-##Videos
+## Donate
+The Universal Saber Library is totally free to use. If you enjoy it and would like to dontate as a "thank you" then you may do so with the button below. Donations are purely optional. 
+
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=jakes0ft%2dsabers%40yahoo%2ecom&lc=US&item_name=Universal%20Saber%20development&item_number=1&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted)
+
+## Videos
 Arduino Saber with ATTiny85 and WT588D
 
 [![Arduino Saber with ATTiny85 and WT588D] (https://i.ytimg.com/vi/cuFtVQqLWX0/hqdefault.jpg?custom=true&w=336&h=188&stc=true&jpg444=true&jpgq=90&sp=68&sigh=9_fkhpRB-PIi4VJ7V15Ql1q142s)](https://www.youtube.com/watch?v=cuFtVQqLWX0)
@@ -148,7 +158,4 @@ Color Change Saber with DIYino
 
 
 
-##Donate
-The Universal Saber Library is totally free to use. If you enjoy it and would like to dontate as a "thank you" then you may do so with the button below. Donations are purely optional. 
 
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=jakes0ft%2dsabers%40yahoo%2ecom&lc=US&item_name=Universal%20Saber%20development&item_number=1&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted)
