@@ -55,6 +55,7 @@
 //Sound players
 #include "sound/ASoundPlayer.h"
 #include "sound/WT588DSoundPlayer.h"
+#include "sound/BY8301SoundPlayer.h"
 
 #ifdef BUILD_DFPLAYERSOUNDPLAYER
 #include "sound/DFPlayerSoundPlayer.h"

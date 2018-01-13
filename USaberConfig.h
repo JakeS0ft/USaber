@@ -81,6 +81,11 @@
 //#define BUILD_DFPLAYERSOUNDPLAYER
 
 /**
+ * Build the BY8301SoundPlayer.
+ */
+#define BUILD_BY8301SoundPlayer
+
+/**
  * Build the DIYinoSoundPlayer.
  * Note: Incompatible with SoftwareSerial. Only build this if not
  * using SoftwareSerial in your project.

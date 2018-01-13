@@ -40,9 +40,11 @@ enum ESoundTypes
 	eeHumSnd,
 	eeCustomSnd,
 	eeMenuSoundSnd,
-
 };
 
+/**
+ * Identifies quantity of each sound type within a font.
+ */
 struct SoundFeatures
 {
 	unsigned char FontIdsPerFont; //Number of font identifiers per font
@@ -58,6 +60,48 @@ struct SoundFeatures
 	unsigned char MenuSounds; //Number of menu sounds
 
 	unsigned char MaxVolume; //Maximum volume (minimum assumed to be zero)
+};
+
+/**
+ * Structure helps describe where the first of each sound is on the sound
+ * player's storage media (FLASH, SD card, etc.) within sound each font.
+ */
+struct SoundOffsets
+{
+	//Global parameters
+	unsigned char BaseAddr; //Base address for all sounds (typically zero)
+
+	//Sound font parameters
+	unsigned char FontIdBase; //Base address for Font ID sounds
+	unsigned char PowerupBase; //Baseaddress for powerup sounds
+	unsigned char PowerdownBase; //Base address for power-down sounds
+	unsigned char HumBase; //Base address for hum sound
+	unsigned char ClashBase; //Base address for clash sounds
+	unsigned char SwingBase; //Base address for swing sounds
+	unsigned char LockupBase; //Base address for lockup sounds
+	unsigned char BlasterBase; //Base address for blaster sounds
+	unsigned char ForceBase; //Base address for force sounds
+	unsigned char CustomBase; //Base address for custom sounds
+	//Menu
+	unsigned char MenuBase; //Base address for menu sounds
+	unsigned char BootBase; //Base address for Boot sound
+};
+
+/**
+ * This structure helps tell the player how the FLASH/SD/etc. is programmed.
+ * It is assumed that sounds belonging to the same font will be programmed at
+ * consecutive addresses on the FLASH/SD/etc. and that sounds of the same type
+ * will be likewise grouped with consecutive addresses.
+ *
+ * EXAMPLE of sound grouping layout:
+ * Locations.ClashBase         : 4
+ * Features.ClashSoundsPerFont : 8 (indexes 4 through 11)
+ * Locations.SwingBase         : 12 (4 + 8, inclusive)
+ */
+struct SoundMap
+{
+	SoundOffsets Locations;
+	SoundFeatures Features;
 };
 
 class ASoundPlayer
