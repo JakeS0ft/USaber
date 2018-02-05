@@ -27,7 +27,7 @@
 #include "sound/DIYinoSoundPlayer.h"
 #include <Arduino.h>
 
-DIYinoSoundPlayer::DIYinoSoundPlayer(uint8_t aTxPin, uint8_t aRxPin, DIYinoSoundMap* apSoundMap, int aBusyPin, bool aBusyState)
+DIYinoSoundPlayer::DIYinoSoundPlayer(uint8_t aTxPin, uint8_t aRxPin, SoundMap* apSoundMap, int aBusyPin, bool aBusyState)
 {
 	mTxPin = aTxPin;
 	mRxPin = aRxPin;

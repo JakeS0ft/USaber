@@ -24,38 +24,8 @@
 #ifndef _DFPLAYERSOUNDPLAYER_H_
 #define _DFPLAYERSOUNDPLAYER_H_
 
-#include "ASoundPlayer.h"
-
-class SoftwareSerial;
-
-/**
- * Structure helps describe how the DFPlayer is programmed by specifying where
- * each type of sound begins. It is assumed that sounds of the same type
- * will be grouped with consecutive addresses.
- * NOTE: The addresses correspond to the relative physical address of the files
- * on the storage media and may not line up with the file names. Make sure the
- * files are copied to the media in the right order.
- */
-struct DFPlayerSoundOffsets
-{
-	//Global parameters
-	unsigned char BaseAddr; //Base address for all sounds (typically zero)
-
-	//Sound font parameters
-	unsigned char FontIdBase; //Base address for Font ID sounds
-	unsigned char PowerupBase; //Baseaddress for powerup sounds
-	unsigned char PowerdownBase; //Base address for power-down sounds
-	unsigned char HumBase; //Base address for hum sound
-	unsigned char ClashBase; //Base address for clash sounds
-	unsigned char SwingBase; //Base address for swing sounds
-	unsigned char LockupBase; //Base address for lockup sounds
-	unsigned char BlasterBase; //Base address for blaster sounds
-	unsigned char ForceBase; //Base address for force sounds
-	unsigned char CustomBase; //Base address for custom sounds
-	//Menu
-	unsigned char MenuBase; //Base address for menu sounds
-	unsigned char BootBase; //Base address for Boot sound
-};
+#include "SoftwareSerial.h"
+#include "DIYinoSoundPlayer.h"
 
 /**
  * This structure helps tell the player how the DFPlayer is programmed. It is
@@ -68,10 +38,9 @@ struct DFPlayerSoundOffsets
  * Features.ClashSoundsPerFont : 8 (indexes 4 through 11)
  * Locations.SwingBase         : 12 (4 + 8, inclusive)
  */
-struct DFPlayerSoundMap
+struct DFPlayerSoundMap : public SoundMap
 {
-	DFPlayerSoundOffsets Locations;
-	SoundFeatures Features;
+	//Use base features
 };
 
 /**
@@ -86,7 +55,7 @@ struct DFPlayerSoundMap
  * automatically loop the hum. So, for continuous hum, PlaySound() need only be
  * called once.
  */
-class DFPlayerSoundPlayer :public ASoundPlayer
+class DFPlayerSoundPlayer :public DIYinoSoundPlayer
 {
 public:
 	/**
@@ -99,66 +68,12 @@ public:
 	 * 	aBusyPin - (optional) Pin for busy state
 	 * 	aBusyState = (optional) TRUE = High when busy, FALSE = LOW when busy
 	 */
-	DFPlayerSoundPlayer(int aRxPin, int aTxPin, DFPlayerSoundMap* apSoundMap, int aBusyPin = -1, bool aBusyState = true);
-
-	virtual ~DFPlayerSoundPlayer();
-
-	virtual void Init();
-
-	virtual bool PlaySound(ESoundTypes aSoundType, uint16_t aIndex);
-
-	virtual bool PlayRandomSound(ESoundTypes aSoundType);
-
-	virtual bool IsBusy();
-
-	virtual const SoundFeatures& Features();
-
-	void Stop();
-
-	virtual void SetVolume(int aVolume);
-
-	virtual void SetFont(unsigned char aFontIdx);
-protected:
+	DFPlayerSoundPlayer(int aRxPin, int aTxPin, SoundMap* apSoundMap, int aBusyPin = -1, bool aBusyState = true);
 
 	/**
-	 * Plays a single file. The argument provided is the physcial address of
-	 * the file on the storage media and is base 1. So, to play the first file
-	 * stored, the argument would be 1. To play the second, 2, and so on.
-	 *
-	 * Args:
-	 *   aFile - Physical address of the file on the storage media.
+	 * Destructor.
 	 */
-	virtual void PlayFile(int aFile);
-
-	/**
-	 * Plays a file in repeat mode.
-	 *
-	 * Args:
-	 *   aFile - Physical address of the file on the storage media.
-	 */
-	virtual void PlayRepeat(int aFile);
-
-	//Serial comms with the DFPlayer module
-	SoftwareSerial* mpSerial;
-
-	//Serial Tx pin
-	int mTxPin;
-	//Serial Rx pin
-	int mRxPin;
-	// Busy pin
-	int mBusyPin;
-	//Busy state
-	bool mBusyState;
-	//Sound map
-	DFPlayerSoundMap* mpSoundMap;
-	//Current font
-	unsigned char mFontIdx;
-	//Total number of sounds per font
-	unsigned char mSoundsPerFont;
-	//Current volume setting
-	unsigned char mVolume;
-
-
+	~DFPlayerSoundPlayer();
 };
 
 

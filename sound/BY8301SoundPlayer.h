@@ -57,7 +57,7 @@ public:
 	 * 	aBusyPin - (optional) Pin for busy state
 	 * 	aBusyState = (optional) TRUE = High when busy, FALSE = LOW when busy
 	 */
-	BY8301SoundPlayer(int aTxPin, BY8301SoundMap* apSoundMap, int aBusyPin = -1, bool aBusyState = true);
+	BY8301SoundPlayer(int aTxPin, SoundMap* apSoundMap, int aBusyPin = -1, bool aBusyState = true);
 
 	virtual ~BY8301SoundPlayer();
 
@@ -106,7 +106,7 @@ protected:
 	//Busy state
 	bool mBusyState;
 	//Sound map
-	BY8301SoundMap* mpSoundMap;
+	SoundMap* mpSoundMap;
 	//Current font
 	unsigned char mFontIdx;
 	//Total number of sounds per font

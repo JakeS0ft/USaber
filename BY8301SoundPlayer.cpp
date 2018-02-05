@@ -28,7 +28,7 @@
 #include "sound/BY8301SoundPlayer.h"
 
 BY8301SoundPlayer::BY8301SoundPlayer(int aTxPin,
-                                     BY8301SoundMap* apSoundMap,
+                                     SoundMap* apSoundMap,
                                      int aBusyPin,
                                      bool aBusyState)
 {
