@@ -24,7 +24,6 @@
 #ifndef _DFPLAYERSOUNDPLAYER_H_
 #define _DFPLAYERSOUNDPLAYER_H_
 
-#include "SoftwareSerial.h"
 #include "DIYinoSoundPlayer.h"
 
 /**
