@@ -27,11 +27,27 @@
 #include <motion/AMotionManager.h>
 #include <Arduino.h>
 
+#define MPU6050_CLOCK_INTERNAL          0x00
+#define MPU6050_CLOCK_PLL_XGYRO         0x01
+#define MPU6050_CLOCK_PLL_YGYRO         0x02
+#define MPU6050_CLOCK_PLL_ZGYRO         0x03
+#define MPU6050_CLOCK_PLL_EXT32K        0x04
+#define MPU6050_CLOCK_PLL_EXT19M        0x05
+#define MPU6050_CLOCK_KEEP_RESET        0x07
+
 #define GYRO_FS_RANGE250  (0b00000000) //250 deg/sec
 #define GYRO_FS_RANGE500  (0b00001000) //500 deg/sec
 #define GYRO_FS_RANGE1000 (0b00010000) //1000 deg/sec
 #define GYRO_FS_RANGE2000 (0b00011000) //2000 deg/sec
-#define MPU6050_RA_INT_ENABLE 0x38
+
+#define MPU6050_ACCEL_FS_2          0x00
+#define MPU6050_ACCEL_FS_4          0x01
+#define MPU6050_ACCEL_FS_8          0x02
+#define MPU6050_ACCEL_FS_16         0x03
+
+#define MPU6050_RA_INT_ENABLE       0x38
+#define MPU6050_RA_GYRO_CONFIG      0x1B
+#define MPU6050_RA_ACCEL_CONFIG     0x1C
 
 //Container to define motion tolerance data
 struct MPU6050LiteTolData

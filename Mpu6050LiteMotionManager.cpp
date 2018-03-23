@@ -58,7 +58,8 @@ void Mpu6050LiteMotionManager::Init()
 	}
 
 	I2CWrite(0x6B, 0); //Wake up the MPU
-	I2CWrite(0x1B, GYRO_FS_RANGE1000); //Set gyro full scale range to +/- 1000 deg/sec
+	I2CWrite(MPU6050_RA_GYRO_CONFIG, GYRO_FS_RANGE1000); //Set gyro full scale range to +/- 1000 deg/sec
+	I2CWrite(MPU6050_RA_ACCEL_CONFIG, MPU6050_ACCEL_FS_2); //Set accl range scale
 
 	//Set up clash detection
 	I2CWrite(0x38, 0b00100000); //Enable motion detection interrupt status
