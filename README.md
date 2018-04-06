@@ -143,7 +143,7 @@ Detects motion with an ADXL335 Accelerometer
 It is possible to streamline or control the build somewhat by editing the *USaberConfig.h* file. Some features are not cross compatable and others may lead to bloated hex file sizes. The latter may not matter for your project, but the former definately will. If you are having build issues, make sure the feature is enabled in this file or try disabiling some features that you aren't using. A best attempt is made in the comments of the file itself to track cross-compatability issues with the various features.
 
 ## Donate
-The Universal Saber Library is totally free to use. If you enjoy it and would like to dontate as a "thank you" then you may do so with the button below. Donations are purely optional. 
+Please consider supporting future development by making a donation. 
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=jakes0ft%2dsabers%40yahoo%2ecom&lc=US&item_name=Universal%20Saber%20development&item_number=1&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted)
 
